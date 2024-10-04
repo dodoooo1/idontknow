@@ -1,0 +1,128 @@
+miscellaneous:
+  max-response-time-to-log-in-ms: 1000
+
+http:
+  clients:
+    default-timeout: 5000
+    webhook-site:
+      base-url: https://webhook.site/f6ec3af8-08d7-427d-b839-3d88f84fa9c0
+
+rate-limit:
+  default:
+    name: DEFAULT
+    max-requests: 50
+    refill-in-seconds: 1
+management:
+  server:
+    port: 8081
+  info:
+    java:
+      enabled: true
+  endpoint:
+    health:
+      probes:
+        enabled: true
+        add-additional-paths: true
+    #      group:
+    #       readiness:
+    #         include: rabbit
+
+  endpoints:
+    web:
+      exposure:
+        include: info, health, metrics, sbom, preStopHook # prometheus
+
+spring:
+  application:
+    name: api
+  main:
+    keep-alive: true # ensures JVM is kept alive, even if all threads are virtual threads https://docs.spring.io/spring-boot/docs/3.2.0-RC2/reference/htmlsingle/#features.spring-application.virtual-threads
+  web:
+    resources:
+      add-mappings: false # disable static content.
+  mvc:
+    log-resolved-exception: false # remove tomcat log exception since it is already treated in GlobalExceptionHandler
+  reactor:
+    context-propagation: auto # automatically propagates trace and span in reactive pipelines.
+  threads:
+    virtual:
+      enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # can not be used for now as claim name does not allow nested values.
+          # authorities-claim-name:
+          # authority-prefix: ROLE_
+          # principal-claim-name: email
+          issuer-uri: http://localhost:8080/realms/api
+          jwk-set-uri: http://localhost:8080/realms/api/protocol/openid-connect/certs
+  data:
+    web:
+      pageable:
+        max-page-size: 20 # default 2000
+
+  flyway:
+    locations: classpath:/db/migration/mysql
+
+  datasource:
+    hikari:
+      maximum-pool-size: 20
+      data-source-properties:
+        ApplicationName: ${spring.application.name} # allows to see what applications are connected to the server and what resources they are using through views like pg_stat_activity
+        reWriteBatchedInserts: true
+        stringtype: unspecified
+    url: jdbc:mysql://localhost:3306/api
+    username: root
+    password: 12345678
+
+  jpa:
+    open-in-view: false # disables lazy loading in web views, important for performance.
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        generate_statistics: false
+        jdbc:
+          # important: When using GenerationType.IDENTITY Hibernate disable batching, you need to use BatchSequenceGenerator
+          batch_size: 10
+          time_zone: Asia/Shanghai
+
+rabbitmq:
+  host: localhost
+  port: 5672
+  username: user
+  password: password
+  listeners:
+    event:
+      queue: webhook
+      prefetch-count: 10
+  publishers:
+    webhook:
+      exchange: outbound
+      routingkey: to_outbound_webhook
+
+    #  jackson:
+    #    property-naming-strategy: LOWER_CAMEL_CASE
+    #  visibility.field: any
+    #  visibility.getter: none
+    #  visibility.setter: none
+    #  visibility.is-getter: none
+
+    serialization:
+      write-dates-as-timestamps: false
+      fail-on-empty-beans: false
+
+  lifecycle:
+    timeout-per-shutdown-phase: 20s
+
+server:
+  shutdown: graceful
+  port: 8082
+---
+spring:
+  config:
+    activate:
+      on-profile: replication
+  flyway:
+    locations: classpath:/db/migration/replication,classpath:/db/migration/mysql
