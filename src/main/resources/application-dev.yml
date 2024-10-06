@@ -40,13 +40,6 @@ spring:
         show_sql: false
         format_sql: false
 
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: http://localhost:8000/realms/api
-          jwk-set-uri: http://localhost:8000/realms/api/protocol/openid-connect/certs
-
   devtools:
     restart:
       enabled: false
