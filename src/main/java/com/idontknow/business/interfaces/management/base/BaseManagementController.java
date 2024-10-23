@@ -1,8 +1,8 @@
 package com.idontknow.business.interfaces.management.base;
 
 import com.idontknow.business.application.services.base.BaseService;
-import com.idontknow.business.entities.base.BaseEntity;
-import com.idontknow.business.mappers.base.ManagementBaseMapper;
+import com.idontknow.business.domain.entities.base.BaseEntity;
+import com.idontknow.business.infra.assembler.base.ManagementBaseMapper;
 import com.idontknow.business.responses.shared.ApiListPaginationSuccess;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;

@@ -17,11 +17,6 @@ rabbitmq:
       exchange: outbound
       routingkey: to_outbound_webhook
 
-profiling:
-  pyroscope:
-    enabled: false
-    server: http://pyroscope-local.cloud-diplomats.com
-
 management:
   endpoint:
     health:
@@ -30,16 +25,11 @@ management:
   # for testing purpose you can use https://github.com/CtrlSpice/otel-desktop-viewer
 
 spring:
-  datasource:
-    url: jdbc:mysql://localhost:3306/api
-    username: user
-    password: password
   jpa:
     properties:
       hibernate:
         show_sql: false
         format_sql: false
-
   devtools:
     restart:
       enabled: false
@@ -52,4 +42,16 @@ logging:
     # hibernate.SQL: DEBUG
     # hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
     # reactor.netty.http.client.HttpClient: DEBUG
+keycloak:
+  realm: api
+  server-url: http://127.0.0.1:8080
+  client-id: api-cli
+  grant-type: password
+  name: admin
+  password: admin
 
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: api-cli
+      client-secret: l5L20VeolDTjUDinfYjaxZHmzWOPs59G

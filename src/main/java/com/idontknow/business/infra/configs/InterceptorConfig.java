@@ -1,7 +1,7 @@
 package com.idontknow.business.infra.configs;
 
-import com.idontknow.business.infra.interceptors.LogSlowResponseTimeInterceptor;
-import com.idontknow.business.infra.interceptors.TimeExecutionInterceptor;
+import com.idontknow.business.infra.filter.interceptors.LogSlowResponseTimeInterceptor;
+import com.idontknow.business.infra.filter.interceptors.TimeExecutionInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;

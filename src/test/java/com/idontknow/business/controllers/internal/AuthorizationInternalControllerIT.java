@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.idontknow.business.BaseIntegrationTest;
 import com.idontknow.business.application.services.ApiKeyService;
-import com.idontknow.business.application.services.ApiKeyService;
 import com.idontknow.business.application.services.CompanyService;
 import com.idontknow.business.constants.AppHeaders;
 import com.idontknow.business.interfaces.internal.CacheInternalApiController;

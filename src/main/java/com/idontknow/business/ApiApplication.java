@@ -1,5 +1,8 @@
 package com.idontknow.business;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.annotation.PostConstruct;
 import java.util.TimeZone;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +19,13 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @ConfigurationPropertiesScan
 @ServletComponentScan
 @SpringBootApplication
+@SecurityScheme(
+        name = "Keycloak"
+        , openIdConnectUrl = "http://localhost:8080/realms/api/.well-known/openid-configuration"
+        , scheme = "bearer"
+        , type = SecuritySchemeType.OPENIDCONNECT
+        , in = SecuritySchemeIn.HEADER
+)
 public class ApiApplication {
 
   // static {

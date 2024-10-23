@@ -1,6 +1,6 @@
 package com.idontknow.business.utils;
 
-import com.idontknow.business.entities.Company;
+import com.idontknow.business.domain.entities.Company;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

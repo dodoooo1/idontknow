@@ -1,6 +1,6 @@
 package com.idontknow.business.infra.event.publishers;
 
-import com.idontknow.business.infra.configs.RabbitConfig;
+import com.idontknow.business.infra.configs.rabbitmq.RabbitConfig;
 import com.idontknow.business.utils.JsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

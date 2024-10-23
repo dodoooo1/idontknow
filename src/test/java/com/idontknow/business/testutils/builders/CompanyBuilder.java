@@ -1,7 +1,7 @@
 package com.idontknow.business.testutils.builders;
 
 import com.idontknow.business.BaseIntegrationTest;
-import com.idontknow.business.entities.Company;
+import com.idontknow.business.domain.entities.Company;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

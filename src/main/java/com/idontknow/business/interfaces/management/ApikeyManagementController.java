@@ -2,9 +2,9 @@ package com.idontknow.business.interfaces.management;
 
 import com.idontknow.business.application.services.ApiKeyService;
 import com.idontknow.business.constants.AppUrls;
-import com.idontknow.business.entities.ApiKey;
+import com.idontknow.business.domain.entities.ApiKey;
+import com.idontknow.business.infra.assembler.ApiKeyMapper;
 import com.idontknow.business.interfaces.management.base.BaseManagementController;
-import com.idontknow.business.mappers.ApiKeyMapper;
 import com.idontknow.business.requests.management.CreateApiKeyManagementRequest;
 import com.idontknow.business.requests.management.UpdateApiKeyManagementRequest;
 import com.idontknow.business.responses.management.ApikeyManagementResponse;
@@ -22,9 +22,9 @@ import org.springframework.web.bind.annotation.*;
 public class ApikeyManagementController
     extends BaseManagementController<
             ApiKey,
-            CreateApiKeyManagementRequest,
-            UpdateApiKeyManagementRequest,
-            ApikeyManagementResponse> {
+                CreateApiKeyManagementRequest,
+                UpdateApiKeyManagementRequest,
+                ApikeyManagementResponse> {
   public static final String BASE_URL = AppUrls.MANAGEMENT + "/api-keys";
 
   @Getter private final ApiKeyService service;

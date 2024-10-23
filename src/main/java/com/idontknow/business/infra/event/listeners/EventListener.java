@@ -1,6 +1,6 @@
 package com.idontknow.business.infra.event.listeners;
 
-import com.idontknow.business.infra.configs.RabbitConfig;
+import com.idontknow.business.infra.configs.rabbitmq.RabbitConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

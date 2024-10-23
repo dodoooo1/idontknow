@@ -2,8 +2,9 @@ package com.idontknow.business.utils;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
-import com.idontknow.business.entities.Company;
 import java.util.List;
+
+import com.idontknow.business.domain.entities.Company;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

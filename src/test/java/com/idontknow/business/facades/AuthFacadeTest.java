@@ -1,9 +1,9 @@
 package com.idontknow.business.facades;
 
 import com.idontknow.business.constants.JWTClaims;
-import com.idontknow.business.infra.auth.providers.ApiKeyAuthentication;
-import com.idontknow.business.infra.auth.providers.ApiKeyAuthentication.ApiKeyDetails;
 import java.util.Collections;
+
+import com.idontknow.business.infra.configs.security.auth.providers.ApiKeyAuthentication;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -85,7 +85,7 @@ public class AuthFacadeTest {
         new ApiKeyAuthentication(
             API_KEY,
             true,
-            ApiKeyDetails.builder().id(1L).companySlug(COMPANY_SLUG).build(),
+            ApiKeyAuthentication.ApiKeyDetails.builder().id(1L).companySlug(COMPANY_SLUG).build(),
             Collections.emptyList());
 
     final var securityContext = Mockito.mock(SecurityContext.class);
@@ -102,7 +102,7 @@ public class AuthFacadeTest {
         new ApiKeyAuthentication(
             API_KEY,
             true,
-            ApiKeyDetails.builder().id(1L).email(EMAIL).build(),
+            ApiKeyAuthentication.ApiKeyDetails.builder().id(1L).email(EMAIL).build(),
             Collections.emptyList());
 
     final var securityContext = Mockito.mock(SecurityContext.class);

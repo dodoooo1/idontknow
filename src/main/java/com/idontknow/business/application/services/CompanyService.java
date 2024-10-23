@@ -1,9 +1,10 @@
 package com.idontknow.business.application.services;
 
+
 import com.idontknow.business.application.services.base.BaseService;
-import com.idontknow.business.entities.Company;
+import com.idontknow.business.domain.entities.Company;
 import com.idontknow.business.exceptions.ResourceNotFoundException;
-import com.idontknow.business.infra.repositories.CompanyRepository;
+import com.idontknow.business.infra.db.repositories.CompanyRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -2,6 +2,7 @@ package com.idontknow.business.interfaces.internal.actuator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.endpoint.web.annotation.ControllerEndpoint;
+import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +19,7 @@ import static org.springframework.http.HttpStatus.OK;
  */
 @Slf4j
 @Component
-@ControllerEndpoint(id = "preStopHook")
+@WebEndpoint(id = "preStopHook")
 class WebMvcPreStopHookEndpoint {
 
   @ResponseStatus(OK)

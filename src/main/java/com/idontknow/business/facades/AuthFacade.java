@@ -2,9 +2,9 @@ package com.idontknow.business.facades;
 
 import com.idontknow.business.constants.JWTClaims;
 import com.idontknow.business.exceptions.InternalServerErrorException;
-import com.idontknow.business.infra.auth.providers.ApiKeyAuthentication;
-import com.idontknow.business.infra.auth.providers.ApiKeyAuthentication.ApiKeyDetails;
 import java.util.Optional;
+
+import com.idontknow.business.infra.configs.security.auth.providers.ApiKeyAuthentication;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -88,7 +88,7 @@ public class AuthFacade {
   private Optional<String> getCompanySlugFromApikey(final Authentication authentication) {
 
     final ApiKeyAuthentication apiKeyAuthentication = (ApiKeyAuthentication) authentication;
-    final ApiKeyDetails apiKeyDetails = apiKeyAuthentication.getApiKeyDetails();
+    final ApiKeyAuthentication.ApiKeyDetails apiKeyDetails = apiKeyAuthentication.getApiKeyDetails();
 
     if (StringUtils.isBlank(apiKeyDetails.getCompanySlug())) {
       log.warn("api-key '{}' does not have a company_slug", apiKeyDetails.getId());

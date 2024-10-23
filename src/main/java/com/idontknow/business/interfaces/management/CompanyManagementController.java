@@ -2,9 +2,9 @@ package com.idontknow.business.interfaces.management;
 
 import com.idontknow.business.application.services.CompanyService;
 import com.idontknow.business.constants.AppUrls;
-import com.idontknow.business.entities.Company;
+import com.idontknow.business.domain.entities.Company;
+import com.idontknow.business.infra.assembler.CompanyMapper;
 import com.idontknow.business.interfaces.management.base.BaseManagementController;
-import com.idontknow.business.mappers.CompanyMapper;
 import com.idontknow.business.requests.management.CreateCompanyManagementRequest;
 import com.idontknow.business.requests.management.UpdateCompanyManagementRequest;
 import com.idontknow.business.responses.management.CompanyManagementResponse;
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class CompanyManagementController
     extends BaseManagementController<
             Company,
-            CreateCompanyManagementRequest,
-            UpdateCompanyManagementRequest,
-            CompanyManagementResponse> {
+                CreateCompanyManagementRequest,
+                UpdateCompanyManagementRequest,
+                CompanyManagementResponse> {
 
   public static final String BASE_URL = AppUrls.MANAGEMENT + "/companies";
 

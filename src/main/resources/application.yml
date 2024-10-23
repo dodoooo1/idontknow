@@ -1,6 +1,5 @@
 miscellaneous:
   max-response-time-to-log-in-ms: 1000
-
 http:
   clients:
     default-timeout: 5000
@@ -57,6 +56,7 @@ spring:
           # principal-claim-name: email
           issuer-uri: http://localhost:8080/realms/api
           jwk-set-uri: http://localhost:8080/realms/api/protocol/openid-connect/certs
+
   data:
     web:
       pageable:
@@ -121,8 +121,5 @@ server:
   port: 8082
 ---
 spring:
-  config:
-    activate:
-      on-profile: replication
-  flyway:
-    locations: classpath:/db/migration/replication,classpath:/db/migration/mysql
+  profiles:
+    active: dev

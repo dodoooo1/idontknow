@@ -1,10 +1,10 @@
 package com.idontknow.business.utils;
 
-import com.idontknow.business.entities.base.BaseEntity;
-
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+
+import com.idontknow.business.domain.entities.base.BaseEntity;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

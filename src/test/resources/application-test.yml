@@ -2,6 +2,13 @@ http:
   clients:
     webhook-site:
       base-url: http://test.com
+keycloak:
+  realm: api
+  server-url: http://127.0.0.1:8080
+  client-id: api-cli
+  grant-type: password
+  name: admin
+  password: admin
 
 slack:
   env: api-test
