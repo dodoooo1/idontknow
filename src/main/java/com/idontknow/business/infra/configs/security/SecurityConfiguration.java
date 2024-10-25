@@ -1,6 +1,7 @@
 package com.idontknow.business.infra.configs.security;
 
 import com.idontknow.business.infra.configs.security.auth.providers.JwtAuthenticationFilter;
+import com.idontknow.business.infra.configs.security.auth.providers.JwtTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -23,13 +24,14 @@ public class SecurityConfiguration {
     private static final String[] WHITELIST_URLS = {"/auth/**"};
 
     private final UserDetailsService userDetailsService;
+    private final JwtTokenService jwtTokenService;
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(@Lazy UserDetailsService userDetailsService) {
-        return new JwtAuthenticationFilter(userDetailsService);
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(userDetailsService,jwtTokenService);
     }
 
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,7 +42,7 @@ public class SecurityConfiguration {
                     auth.requestMatchers(WHITELIST_URLS).permitAll().anyRequest().authenticated();
                 })
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
