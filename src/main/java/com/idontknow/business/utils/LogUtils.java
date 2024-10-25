@@ -3,7 +3,7 @@ package com.idontknow.business.utils;
 
 import java.util.List;
 
-import com.idontknow.business.domain.entities.base.BaseEntity;
+import com.idontknow.business.infra.gatewayimpl.dataobject.base.BaseEntity;
 import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.NonNull;

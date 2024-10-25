@@ -30,7 +30,6 @@ public class AddCredsToMDCFilter extends OncePerRequestFilter {
       throws ServletException, IOException {
 
     MDC.put(USER_MDC_KEY, AuthFacade.getUserEmail());
-    MDC.put(COMPANY_MDC_KEY, AuthFacade.getCompanySlug());
 
     try {
       filterChain.doFilter(request, response);

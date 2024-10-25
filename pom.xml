@@ -46,10 +46,9 @@
         <apache-commons-text.version>1.12.0</apache-commons-text.version>
         <apache-commons-collection.version>4.4</apache-commons-collection.version>
         <guava.version>33.3.1-jre</guava.version>
-        <keycloak.version>25.0.6</keycloak.version>
         <!-- Development-->
         <git-code-format-maven-plugin.version>5.3</git-code-format-maven-plugin.version>
-
+        <jwt.version>0.12.6</jwt.version>
         <!-- Test -->
         <testcontainers.version>1.20.1</testcontainers.version>
 
@@ -82,12 +81,20 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>${jwt.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>${jwt.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>${jwt.version}</version>
         </dependency>
 
         <!-- Database -->
@@ -144,13 +151,6 @@
             <version>${opentelemetry-api.version}</version>
         </dependency>
 
-        <!-- Profiling -->
-        <dependency>
-            <groupId>io.pyroscope</groupId>
-            <artifactId>agent</artifactId>
-            <version>${pyroscope-agent.version}</version>
-        </dependency>
-
         <!-- Logs json encoder -->
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -192,22 +192,28 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson-spring-boot-starter</artifactId>
+            <version>3.37.0</version>
+        </dependency>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
+
 
         <!-- RabbitMQ -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
-        <!-- Kubernetes -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-kubernetes-client</artifactId>
-            <!-- rate limiting -->
-        </dependency>
+
         <dependency>
             <groupId>com.bucket4j</groupId>
             <artifactId>bucket4j-core</artifactId>
@@ -224,29 +230,6 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
             <version>4.4</version>
-        </dependency>
-        <dependency>
-            <groupId>com.slack.api</groupId>
-            <artifactId>slack-api-client</artifactId>
-            <version>${slack-api-client.version}</version>
-        </dependency>
-        <!-- keycloak-core -->
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-core</artifactId>
-            <version>${keycloak.version}</version>
-        </dependency>
-        <!-- keycloak-admin-client -->
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-admin-client</artifactId>
-            <version>${keycloak.version}</version>
-        </dependency>
-        <!-- keycloak-policy-enforcer -->
-        <dependency>
-            <groupId>org.keycloak</groupId>
-            <artifactId>keycloak-policy-enforcer</artifactId>
-            <version>${keycloak.version}</version>
         </dependency>
         <!-- springdoc-openapi-starter-webmvc-ui -->
         <dependency>

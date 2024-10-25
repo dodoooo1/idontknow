@@ -4,7 +4,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import com.idontknow.business.domain.entities.base.BaseEntity;
+import com.idontknow.business.infra.gatewayimpl.dataobject.base.BaseEntity;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

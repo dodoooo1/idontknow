@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 @Slf4j
@@ -19,13 +20,14 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @ConfigurationPropertiesScan
 @ServletComponentScan
 @SpringBootApplication
-@SecurityScheme(
-        name = "Keycloak"
+@EnableJpaRepositories
+/*@SecurityScheme(
+        name = "api"
         , openIdConnectUrl = "http://localhost:8080/realms/api/.well-known/openid-configuration"
         , scheme = "bearer"
         , type = SecuritySchemeType.OPENIDCONNECT
         , in = SecuritySchemeIn.HEADER
-)
+)*/
 public class ApiApplication {
 
   // static {

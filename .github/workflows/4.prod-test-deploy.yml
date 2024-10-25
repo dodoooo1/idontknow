@@ -13,7 +13,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  
+
   prod-test:
     runs-on: ubuntu-latest
     if: (contains(toJSON(github.head_ref), 'release/') || contains(toJSON(github.head_ref), 'hotfix/')) && github.event.pull_request.merged == true
@@ -26,11 +26,11 @@ jobs:
           distribution: 'liberica'
           java-version: '21'
           cache: 'maven'
-      
+
       # 2. Test
       - name: Run Unit & Integration Tests
         run: mvn clean verify --no-transfer-progress
-  
+
   prod-deploy:
     needs: [ prod-test ]
     runs-on: ubuntu-latest
@@ -38,7 +38,7 @@ jobs:
     permissions: # Necessary for workload identity provider
       contents: 'read'
       id-token: 'write'
-    
+
     outputs:
       RELEASE_VERSION: ${{ steps.variables.outputs.RELEASE_VERSION }}
     steps:
@@ -50,7 +50,7 @@ jobs:
           distribution: 'liberica'
           java-version: '21'
           cache: 'maven'
-      
+
       # 2. Sets & print variables
       - name: Sets variables
         id: variables
@@ -80,36 +80,36 @@ jobs:
           echo "RELEASE_VERSION=$RELEASE_VERSION" >> $GITHUB_ENV
           
           echo "RELEASE_VERSION=${RELEASE_VERSION}" >> $GITHUB_OUTPUT
-      
+
       - name: Print variables
         run: |
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY"
-      
+
       # 3. Auth
       - name: Auth via Workload Identity Federation
-        id: auth
-        uses: google-github-actions/auth@v2.1.4
+        id: system
+        uses: google-github-actions/system@v2.1.4
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
-      
+
       # 4. Setup gcloud & configure docker to use gcloud
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v2.1.1
         with:
           project_id: ${{ secrets.PROJECT_ID }}
       - name: Setup docker to authenticate via gcloud
-        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
-      
+        run: gcloud --quiet system configure-docker us-docker.pkg.dev
+
       # 5. Build image
       - name: Build image
         run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
-      
+
       # 6. Push image
       - name: Push image
         run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
-      
+
       # 7. Notify if fails
       #      - name: Notify slack fail
       #        if: failure()
@@ -120,7 +120,7 @@ jobs:
       #          channel: app-alerts
       #          status: FAILED
       #          color: danger
-  
+
   prod-create-release:
     needs: [ prod-deploy ]
     runs-on: ubuntu-latest
@@ -134,7 +134,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ steps.app-token.outputs.token }}
-      
+
       # 2. Create release
       - name: Create release
         env:
@@ -144,7 +144,7 @@ jobs:
           git tag -a $RELEASE_VERSION -m "release: $RELEASE_VERSION"
           git push origin $RELEASE_VERSION
           gh release create $RELEASE_VERSION --title "$RELEASE_VERSION" --generate-notes
-  
+
   prod-create-pull-request:
     needs: [ prod-deploy ]
     runs-on: ubuntu-latest
@@ -160,7 +160,7 @@ jobs:
           ref: develop
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
-      
+
       # 2. Create PR
       - name: Open PR to align develop with main
         env:

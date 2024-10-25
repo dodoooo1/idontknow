@@ -46,16 +46,6 @@ spring:
   threads:
     virtual:
       enabled: true
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          # can not be used for now as claim name does not allow nested values.
-          # authorities-claim-name:
-          # authority-prefix: ROLE_
-          # principal-claim-name: email
-          issuer-uri: http://localhost:8080/realms/api
-          jwk-set-uri: http://localhost:8080/realms/api/protocol/openid-connect/certs
 
   data:
     web:
@@ -79,7 +69,7 @@ spring:
   jpa:
     open-in-view: false # disables lazy loading in web views, important for performance.
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         generate_statistics: false

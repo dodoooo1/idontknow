@@ -2,46 +2,22 @@ package com.idontknow.business.facades;
 
 import com.idontknow.business.constants.JWTClaims;
 import com.idontknow.business.exceptions.InternalServerErrorException;
+
+import java.util.Objects;
 import java.util.Optional;
 
-import com.idontknow.business.infra.configs.security.auth.providers.ApiKeyAuthentication;
+import io.jsonwebtoken.Jwt;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
 @Slf4j
 @UtilityClass
 public class AuthFacade {
-
-  public static String getCompanySlug() {
-    return getCompanySlugOptional().orElse(StringUtils.EMPTY);
-  }
-
   public static String getUserEmail() {
     return getUserEmailOptional().orElse(StringUtils.EMPTY);
-  }
-
-  public static Optional<String> getCompanySlugOptional() {
-    try {
-
-      final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-      if (isJWT(authentication)) {
-        return getCompanySlugFromJwt((Jwt) authentication.getPrincipal());
-      } else if (isApiKey(authentication)) {
-        return getCompanySlugFromApikey(authentication);
-      }
-
-      return Optional.empty();
-
-    } catch (final Exception ex) {
-      log.error("error getting company_slug from AuthFacade", ex);
-      throw new InternalServerErrorException();
-    }
   }
 
   public static Optional<String> getUserEmailOptional() {
@@ -49,13 +25,10 @@ public class AuthFacade {
 
       final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-      if (isJWT(authentication)) {
-        final Jwt jwt = (Jwt) authentication.getPrincipal();
-        return Optional.ofNullable(jwt.getClaimAsString(JWTClaims.CLAIM_EMAIL));
+      if (Objects.nonNull(authentication)) {
+        final Object principal = authentication.getPrincipal();
+        return Optional.ofNullable("principal");
 
-      } else if (isApiKey(authentication)) {
-        final ApiKeyAuthentication apiKeyAuthentication = (ApiKeyAuthentication) authentication;
-        return Optional.ofNullable(apiKeyAuthentication.getApiKeyDetails().getEmail());
       }
 
       return Optional.empty();
@@ -66,34 +39,4 @@ public class AuthFacade {
     }
   }
 
-  private boolean isJWT(final Authentication authentication) {
-    return (authentication instanceof Jwt || authentication instanceof JwtAuthenticationToken);
-  }
-
-  private boolean isApiKey(final Authentication authentication) {
-    return authentication instanceof ApiKeyAuthentication;
-  }
-
-  private Optional<String> getCompanySlugFromJwt(final Jwt jwt) {
-    final Optional<String> companySlugOptional =
-        Optional.ofNullable(jwt.getClaimAsString(JWTClaims.CLAIM_COMPANY_SLUG));
-
-    if (companySlugOptional.isEmpty()) {
-      log.warn("user '{}' does not have a company_slug", jwt.getClaimAsString(JWTClaims.CLAIM_EMAIL));
-    }
-
-    return companySlugOptional;
-  }
-
-  private Optional<String> getCompanySlugFromApikey(final Authentication authentication) {
-
-    final ApiKeyAuthentication apiKeyAuthentication = (ApiKeyAuthentication) authentication;
-    final ApiKeyAuthentication.ApiKeyDetails apiKeyDetails = apiKeyAuthentication.getApiKeyDetails();
-
-    if (StringUtils.isBlank(apiKeyDetails.getCompanySlug())) {
-      log.warn("api-key '{}' does not have a company_slug", apiKeyDetails.getId());
-    }
-
-    return Optional.ofNullable(apiKeyDetails.getCompanySlug());
-  }
 }

@@ -18,10 +18,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 @RequiredArgsConstructor
 public class LocalCacheManagerService {
-
-  private final ApiKeyService apiKeyService;
-  private final CompanyService companyService;
-  private final RestTemplate restTemplate;
   private final CacheManager cacheManager;
 
 
@@ -36,10 +32,5 @@ public class LocalCacheManagerService {
   public void evictAll() {
     this.cacheManager.getCacheNames().forEach(name -> this.cacheManager.getCache(name).clear());
     log.info("[cache-eviction] evicted all local caches");
-  }
-
-  private String getInternalApikey() {
-    final Long companyId = this.companyService.findBySlug(AppCompanySlug.INTERNAL).getId();
-    return this.apiKeyService.findFirstByCompanyIdAndIsActive(companyId).getKey();
   }
 }

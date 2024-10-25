@@ -1,8 +1,9 @@
 package com.idontknow.business.infra.auditors;
 
-import com.idontknow.business.facades.AuthFacade;
-
 import java.util.Optional;
+
+import com.idontknow.business.facades.AuthFacade;
+import com.idontknow.business.infra.configs.security.auth.providers.JwtTokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

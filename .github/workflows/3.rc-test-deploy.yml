@@ -25,11 +25,11 @@ jobs:
           distribution: 'liberica'
           java-version: '21'
           cache: 'maven'
-      
+
       # 2. Test
       - name: Run Unit & Integration Tests
         run: mvn clean verify --no-transfer-progress
-  
+
   rc-deploy:
     needs: [ rc-test ]
     runs-on: ubuntu-latest
@@ -37,7 +37,7 @@ jobs:
     permissions: # Necessary for workload identity provider
       contents: 'read'
       id-token: 'write'
-    
+
     steps:
       # 1. Setup
       - uses: actions/checkout@v4
@@ -47,7 +47,7 @@ jobs:
           distribution: 'liberica'
           java-version: '21'
           cache: 'maven'
-      
+
       # 2. Sets & print variables
       - name: Sets variables
         id: variables
@@ -74,36 +74,36 @@ jobs:
           # 4. Set vars as env
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY" >> $GITHUB_ENV
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-      
+
       - name: Print variables
         run: |
           echo "IMAGE_TAG=$IMAGE_TAG"
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY"
-      
+
       # 3. Auth
       - name: Auth via Workload Identity Federation
-        id: auth
-        uses: google-github-actions/auth@v2.1.4
+        id: system
+        uses: google-github-actions/system@v2.1.4
         with:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
-      
+
       # 4. Setup gcloud & configure docker to use gcloud
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2.1.1
         with:
           project_id: ${{ secrets.PROJECT_ID }}
       - name: Setup docker to authenticate via gcloud
-        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
-      
+        run: gcloud --quiet system configure-docker us-docker.pkg.dev
+
       # 5. Build image
       - name: Build image
         run: mvn clean package -DskipTests spring-boot:build-image --no-transfer-progress -Dspring-boot.build-image.imageName=$IMAGE_REGISTRY:$IMAGE_TAG
-      
+
       # 6. Push image
       - name: Push image
         run: docker push $IMAGE_REGISTRY:$IMAGE_TAG
-      
+
       # 7. Notify if failss
       #      - name: Notify slack fail
       #        if: failure()

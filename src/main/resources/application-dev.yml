@@ -22,9 +22,9 @@ management:
     health:
       show-details: always
 
-  # for testing purpose you can use https://github.com/CtrlSpice/otel-desktop-viewer
-
 spring:
+  cache:
+    type: caffeine
   jpa:
     properties:
       hibernate:
@@ -42,13 +42,7 @@ logging:
     # hibernate.SQL: DEBUG
     # hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
     # reactor.netty.http.client.HttpClient: DEBUG
-keycloak:
-  realm: api
-  server-url: http://127.0.0.1:8080
-  client-id: api-cli
-  grant-type: password
-  name: admin
-  password: admin
+
 
 springdoc:
   swagger-ui:

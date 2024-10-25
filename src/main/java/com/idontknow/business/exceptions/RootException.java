@@ -1,10 +1,10 @@
 package com.idontknow.business.exceptions;
 
-import com.idontknow.business.responses.shared.ApiErrorDetails;
-
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.idontknow.business.shared.ApiErrorDetails;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;

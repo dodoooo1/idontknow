@@ -5,7 +5,6 @@ import static java.util.Collections.emptyList;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 import com.idontknow.business.constants.AppConstants;
-import com.idontknow.business.responses.shared.ApiErrorDetails;
 
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
@@ -13,13 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.idontknow.business.shared.ApiErrorDetails;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.LazyInitializationException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;

@@ -21,7 +21,7 @@ jobs:
     permissions: # Necessary for workload identity provider
       contents: 'read'
       id-token: 'write'
-    
+
     if: github.event.pull_request.merged == true
     steps:
       # 1. Setup
@@ -32,7 +32,7 @@ jobs:
           distribution: 'liberica'
           java-version: '21'
           cache: 'maven'
-      
+
       # 2. Sets & print variables
       - name: Sets variables
         id: variables
@@ -44,7 +44,7 @@ jobs:
           # 3. Set vars as env
           echo "IMAGE_REGISTRY=$IMAGE_REGISTRY" >> $GITHUB_ENV
           echo "IMAGE_TAG=$IMAGE_TAG" >> $GITHUB_ENV
-      
+
       - name: Print variables
         run: |
           echo "IMAGE_TAG=$IMAGE_TAG"
@@ -52,8 +52,8 @@ jobs:
 
 #      # 3. Auth
 #      - name: Auth via Workload Identity Federation
-#        id: auth
-#        uses: google-github-actions/auth@v2.1.2
+#        id: system
+#        uses: google-github-actions/system@v2.1.2
 #        with:
 #          workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
 #          service_account: ${{ secrets.SERVICE_ACCOUNT }} # impersonated SA
@@ -64,7 +64,7 @@ jobs:
 #        with:
 #          project_id: ${{ secrets.PROJECT_ID }}
 #      - name: Setup docker to authenticate via gcloud
-#        run: gcloud --quiet auth configure-docker us-docker.pkg.dev
+#        run: gcloud --quiet system configure-docker us-docker.pkg.dev
 #
 #      # 5. Build image
 #      - name: Build image
