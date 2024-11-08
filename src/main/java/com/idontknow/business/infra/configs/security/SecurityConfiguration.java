@@ -1,13 +1,14 @@
 package com.idontknow.business.infra.configs.security;
 
-import com.idontknow.business.infra.configs.security.auth.providers.JwtAuthenticationFilter;
-import com.idontknow.business.infra.configs.security.auth.providers.JwtTokenService;
+import com.idontknow.business.constants.AppUrls;
+import com.idontknow.business.infra.configs.security.auth.providers.ApiKeyAuthenticationFilter;
+import com.idontknow.business.infra.configs.security.auth.providers.ApiKeyAuthenticationProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -15,47 +16,61 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
+
+import java.util.Collections;
 
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-    private static final String[] WHITELIST_URLS = {"/auth/**"};
 
     private final UserDetailsService userDetailsService;
-    private final JwtTokenService jwtTokenService;
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {
-        return new JwtAuthenticationFilter(userDetailsService,jwtTokenService);
+    public AuthenticationProvider apiKeyAuthenticationProvider() {
+        return new ApiKeyAuthenticationProvider(userDetailsService, passwordEncoder());
     }
 
+    @Bean
+    public AuthenticationManager authenticationManager() {
+        return new ProviderManager(
+                Collections.singletonList(this.apiKeyAuthenticationProvider()));
+    }
 
+    @Bean
+    public ApiKeyAuthenticationFilter apiKeyAuthenticationFilter() {
+        return new ApiKeyAuthenticationFilter(
+                AppUrls.PLATFORM_API + "/**", this.authenticationManager());
+
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
+        http.addFilterBefore(apiKeyAuthenticationFilter(), AnonymousAuthenticationFilter.class)
+                .authorizeHttpRequests(
+                        authorize ->
+                                authorize
+
+                                        .requestMatchers(AppUrls.PUBLIC + "/**", "/auth/**", "/v3/api-docs/**",
+                                                "/swagger-ui/**", "/swagger-ui.html")
+                                        .permitAll()
+                                        //
+                                        .anyRequest()
+                                        .denyAll())
+                // To prevent any misconfiguration we disable explicitly all authentication scheme
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractHttpConfigurer::disable)
+                .logout(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers(WHITELIST_URLS).permitAll().anyRequest().authenticated();
-                })
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+                .csrf(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
     @Bean
-    AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder(){
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 }

@@ -63,6 +63,5 @@ public class SysResourceEntity {
 
     private String openType;
 
-    private Long tenantId;
 
 }

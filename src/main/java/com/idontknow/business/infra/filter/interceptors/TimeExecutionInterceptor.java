@@ -7,16 +7,16 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 public class TimeExecutionInterceptor implements HandlerInterceptor {
 
-  private static final String TIME = "StopWatch";
+    private static final String TIME = "StopWatch";
 
-  @Override
-  public boolean preHandle(
-      final HttpServletRequest request,
-      @NonNull final HttpServletResponse response,
-      @NonNull final Object handler) {
-    final long nano = System.nanoTime();
+    @Override
+    public boolean preHandle(
+            final HttpServletRequest request,
+            @NonNull final HttpServletResponse response,
+            @NonNull final Object handler) {
+        final long nano = System.nanoTime();
 
-    request.setAttribute(TIME, nano);
-    return true;
-  }
+        request.setAttribute(TIME, nano);
+        return true;
+    }
 }

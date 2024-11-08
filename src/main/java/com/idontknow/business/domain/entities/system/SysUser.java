@@ -15,8 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class SysUserEntity {
-
+public class SysUser {
     private Long id;
     private String username;
     private String password;
@@ -31,22 +30,13 @@ public class SysUserEntity {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String status;
-    private Long tenantId;
     private Set<SysRoleEntity> roles = new HashSet<>();
 
-    // 领域方法
-    public void updatePassword(String newPassword, String newSalt) {
+    public void updatePassword(String newPassword) {
         this.password = newPassword;
-        this.salt = newSalt;
     }
+    public void updateStatus( String status) {
+        this.status = status;
 
-    public void activate() {
-        this.status = "ACTIVE";
     }
-
-    public void deactivate() {
-        this.status = "INACTIVE";
-    }
-
-    // Getters 和其他业务逻辑方法
 }

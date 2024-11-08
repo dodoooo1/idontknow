@@ -4,5 +4,5 @@ import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class AppCompanySlug {
-  public static final String INTERNAL = "internal-company";
+    public static final String INTERNAL = "internal-company";
 }

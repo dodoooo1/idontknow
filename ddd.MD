@@ -30,6 +30,7 @@ src
 ```
 
 ### 2. 各层说明
+
 ##### 2.1 应用层（application）
 
 含义与作用： 应用层负责协调领域层的业务逻辑，处理用户请求和应用程序的工作流。它将用户请求转换为领域模型的操作，不包含业务逻辑。
@@ -40,6 +41,7 @@ src
     dto：数据传输对象，用于在不同层之间传递数据。
 
 示例：
+
 ```java
 
 // services/InbountOrderService.java
@@ -63,6 +65,7 @@ public class InboundOrderService {
     }
 }
 ```
+
 ##### 2.2 领域层（domain）
 
 含义与作用： 领域层是 DDD 的核心，包含领域模型和领域逻辑。领域模型由实体、聚合和值对象构成。
@@ -98,17 +101,19 @@ public class InboundOrder {
     }
 }
 ```
+
 // model/valueobject/InboundOrderItem.java
 package com.example.wms.domain.model.valueobject;
 
 public class InboundOrderItem {
-    private final Long productId;
-    private final int quantity;
+private final Long productId;
+private final int quantity;
 
     public InboundOrderItem(Long productId, int quantity) {
         this.productId = productId;
         this.quantity = quantity;
     }
+
 }
 
 ##### 2.3 基础设施层（infrastructure）
@@ -148,6 +153,7 @@ public class InboundOrderRepositoryImpl implements InboundOrderRepository {
     }
 }
 ```
+
 ##### 2.4 接口层（interfaces）
 
 含义与作用： 接口层是用户与系统交互的接口，通常是 RESTful API，用于接收用户请求并返回结果。
@@ -181,6 +187,7 @@ public class InboundOrderController {
     }
 }
 ```
+
 ##### 2.5 公共工具层（common）
 
 含义与作用： 公共工具层用于存放全局通用的工具类，例如日期处理、字符串处理等。
@@ -202,6 +209,7 @@ public class DateUtils {
     }
 }
 ```
+
 ### 3. 领域事件（Domain Events）
 
 含义与作用： 领域事件表示在领域模型中发生的重要事件，用于通知其他部分系统状态的变化。

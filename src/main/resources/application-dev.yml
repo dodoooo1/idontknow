@@ -1,4 +1,3 @@
-
 http:
   clients:
     webhook-site:
@@ -42,10 +41,3 @@ logging:
     # hibernate.SQL: DEBUG
     # hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
     # reactor.netty.http.client.HttpClient: DEBUG
-
-
-springdoc:
-  swagger-ui:
-    oauth:
-      client-id: api-cli
-      client-secret: l5L20VeolDTjUDinfYjaxZHmzWOPs59G

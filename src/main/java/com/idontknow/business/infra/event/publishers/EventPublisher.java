@@ -18,35 +18,35 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class EventPublisher {
 
-  @Qualifier(RabbitConfig.RABBIT_EVENT_PUBLISHER)
-  private final AmqpTemplate amqpTemplate;
+    @Qualifier(RabbitConfig.RABBIT_EVENT_PUBLISHER)
+    private final AmqpTemplate amqpTemplate;
 
-  public void publish(
-      @NonNull final String exchange,
-      @NonNull final String routingKey,
-      @NonNull final Object payload) {
+    public void publish(
+            @NonNull final String exchange,
+            @NonNull final String routingKey,
+            @NonNull final Object payload) {
 
-    try {
+        try {
 
-      final String msg = JsonUtils.serializeToCamelCase(payload);
+            final String msg = JsonUtils.serializeToCamelCase(payload);
 
-      final MessageProperties props =
-          MessagePropertiesBuilder.newInstance()
-              .setContentType(MessageProperties.CONTENT_TYPE_JSON)
-              .setContentEncoding(StandardCharsets.UTF_8.toString())
-              .build();
+            final MessageProperties props =
+                    MessagePropertiesBuilder.newInstance()
+                            .setContentType(MessageProperties.CONTENT_TYPE_JSON)
+                            .setContentEncoding(StandardCharsets.UTF_8.toString())
+                            .build();
 
-      log.info(
-          "[RABBITMQ][PUB][{}] headers {} payload {} ", routingKey, props.getHeaders(), payload);
+            log.info(
+                    "[RABBITMQ][PUB][{}] headers {} payload {} ", routingKey, props.getHeaders(), payload);
 
-      final Message message = MessageBuilder.withBody(msg.getBytes()).andProperties(props).build();
-      this.amqpTemplate.send(exchange, routingKey, message);
+            final Message message = MessageBuilder.withBody(msg.getBytes()).andProperties(props).build();
+            this.amqpTemplate.send(exchange, routingKey, message);
 
-    } catch (final Exception ex) {
-      log.error(
-          format(
-              "[RABBITMQ][PUB][%s] error publishing message with payload %s", routingKey, payload),
-          ex);
+        } catch (final Exception ex) {
+            log.error(
+                    format(
+                            "[RABBITMQ][PUB][%s] error publishing message with payload %s", routingKey, payload),
+                    ex);
+        }
     }
-  }
 }

@@ -1,7 +1,6 @@
 package com.idontknow.business.interfaces.internal.actuator;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.actuate.endpoint.web.annotation.ControllerEndpoint;
 import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -22,12 +21,12 @@ import static org.springframework.http.HttpStatus.OK;
 @WebEndpoint(id = "preStopHook")
 class WebMvcPreStopHookEndpoint {
 
-  @ResponseStatus(OK)
-  @GetMapping("/{delayInMillis}")
-  public ResponseEntity<Void> preStopHook(@PathVariable("delayInMillis") final long delayInMillis)
-      throws InterruptedException {
-    log.info("[preStopHook] received signal to sleep for {}ms", delayInMillis);
-    Thread.sleep(delayInMillis);
-    return null;
-  }
+    @ResponseStatus(OK)
+    @GetMapping("/{delayInMillis}")
+    public ResponseEntity<Void> preStopHook(@PathVariable("delayInMillis") final long delayInMillis)
+            throws InterruptedException {
+        log.info("[preStopHook] received signal to sleep for {}ms", delayInMillis);
+        Thread.sleep(delayInMillis);
+        return null;
+    }
 }

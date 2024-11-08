@@ -9,8 +9,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
-
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -22,7 +20,7 @@ import java.util.Date;
 public class SysRoleDO extends BaseEntity {
     public static final String TABLE_NAME = "sys_role";
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name", nullable = false)
@@ -34,8 +32,6 @@ public class SysRoleDO extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "tenant_id")
-    private Long tenantId;
 
     // getters and setters
 }

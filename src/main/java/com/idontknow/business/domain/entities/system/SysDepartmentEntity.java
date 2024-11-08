@@ -47,7 +47,6 @@ public class SysDepartmentEntity {
 
     private String status;
 
-    private Long tenantId;
 
     private Boolean izLeaf;
 

@@ -30,6 +30,5 @@ public class SysRoleEntity {
 
     private Date updatedAt;
 
-    private Long tenantId;
 
 }

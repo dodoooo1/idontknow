@@ -1,23 +1,21 @@
-
 package com.idontknow.business.domain.gateway;
 
-import com.idontknow.business.domain.entities.system.SysUserEntity;
+import com.idontknow.business.domain.entities.system.SysUser;
 
 /**
  * 系统用户网关
  */
 public interface SysUserGateway {
 
-	// 检查用户名是否存在
-	public boolean isUsernameTaken(String username) ;
+    // 检查用户名是否存在
+     boolean isUsernameTaken(String username);
 
-	// 检查邮箱是否存在
-	public boolean isEmailTaken(String email) ;
+    // 检查邮箱是否存在
+     boolean isEmailTaken(String email);
 
-	public void create(SysUserEntity sysUserEntity) ;
+    void create(SysUser sysUser);
 
-	public void update(SysUserEntity sysUserEntity) ;
+    void update(SysUser sysUser);
 
-	public void delete(Long[] ids);
-
+     void delete(Long[] ids);
 }

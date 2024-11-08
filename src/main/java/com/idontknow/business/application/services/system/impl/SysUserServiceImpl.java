@@ -1,18 +1,16 @@
 package com.idontknow.business.application.services.system.impl;
 
-import com.idontknow.business.application.dto.LoginRequest;
 import com.idontknow.business.application.services.BaseService;
 import com.idontknow.business.application.services.system.SysUserService;
+import com.idontknow.business.application.services.system.command.cmd.UpdateSysUserRequest;
 import com.idontknow.business.application.services.system.command.impl.SysUserCreateCmdExe;
-import com.idontknow.business.domain.entities.system.SysUserEntity;
-import com.idontknow.business.infra.configs.security.auth.providers.JwtTokenService;
+import com.idontknow.business.application.services.system.query.impl.SysUserQueryExe;
+import com.idontknow.business.application.services.system.query.qry.SysUserResponse;
+import com.idontknow.business.domain.entities.system.SysUser;
+import com.idontknow.business.infra.assembler.SysUserMapper;
+import com.idontknow.business.infra.gatewayimpl.dataobject.system.SysUserDO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,36 +23,32 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class SysUserServiceImpl extends BaseService<SysUserEntity> implements SysUserService {
+public class SysUserServiceImpl extends BaseService<SysUser> implements SysUserService {
     private final SysUserCreateCmdExe sysUserCreateCmdExe;
-    private final JwtTokenService jwtTokenService;
-    private final AuthenticationProvider authenticationProvider;
-    @Override
-    public void create(SysUserEntity sysUserEntity) {
-        sysUserCreateCmdExe.create(sysUserEntity);
-       applicationEventPublisher.publishEvent(sysUserEntity);
-    }
+    private final SysUserQueryExe sysUserQueryExe;
+    private final SysUserMapper mapper;
 
     @Override
-    public SysUserEntity findByUsername(String username) {
-        return null;
+    public void create(SysUser sysUser) {
+        sysUserCreateCmdExe.create(sysUser);
+        applicationEventPublisher.publishEvent(sysUser);
     }
 
-    public String login(LoginRequest loginRequest) {
-        final Authentication authentication = authenticationProvider.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.username(),
-                        loginRequest.password()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        final SysUserEntity user = findByUsername(loginRequest.username());
-        return jwtTokenService.generateToken(user.getUsername(), user.getRoles());
+    @Override
+    public SysUser findByUsername(String username) {
+        return mapper.PersistToEntity(sysUserQueryExe.findByUsername(username));
     }
 
-
-    public SysUserEntity getCurrentUser() {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return findByUsername(userDetails.getUsername());
+    @Override
+    public SysUserResponse findById(String id) {
+        return mapper.PersistToResponse(sysUserQueryExe.findById(id));
     }
+
+    @Override
+    public void updateStatus(UpdateSysUserRequest updateSysUserRequest) {
+        SysUserDO byId = sysUserQueryExe.findById(updateSysUserRequest.id());
+        SysUser sysUser = mapper.PersistToEntity(byId);
+        sysUserCreateCmdExe.updateStatus(sysUser,updateSysUserRequest.status());
+    }
+
 }

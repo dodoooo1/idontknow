@@ -15,68 +15,68 @@ import org.apache.commons.lang3.StringUtils;
 @UtilityClass
 public class JsonUtils {
 
-  private static final String SERIALIZATION_ERROR_MESSAGE =
-      "Something went wrong during serialization/deserialization";
+    private static final String SERIALIZATION_ERROR_MESSAGE =
+            "Something went wrong during serialization/deserialization";
 
-  public static <T> T deserializeFromCamelCase(final String content, final Class<T> valueType) {
-    return getMapperSerialize(content, valueType, false);
-  }
-
-  public static <T> T deserializeFromSnakeCase(final String content, final Class<T> valueType) {
-    return getMapperSerialize(content, valueType, true);
-  }
-
-  public static String serializeToCamelCase(final Object content) {
-    try {
-      return new ObjectMapper()
-          .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
-          // Note: Force jackson to only serialize field and not getters.
-          .setVisibility(PropertyAccessor.ALL, Visibility.NONE)
-          .setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
-          .setPropertyNamingStrategy(new PropertyNamingStrategies.LowerCamelCaseStrategy())
-          .registerModule(new JavaTimeModule())
-          .writeValueAsString(content);
-    } catch (final Exception ex) {
-      log.error(SERIALIZATION_ERROR_MESSAGE, ex);
-      throw new IllegalArgumentException(ex);
+    public static <T> T deserializeFromCamelCase(final String content, final Class<T> valueType) {
+        return getMapperSerialize(content, valueType, false);
     }
-  }
 
-  public static String serializeToSnakeCase(final Object content) {
-    try {
-      return new ObjectMapper()
-          .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
-          // Note: Force jackson to only serialize field and not getters.
-          .setVisibility(PropertyAccessor.ALL, Visibility.NONE)
-          .setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
-          .setPropertyNamingStrategy(new PropertyNamingStrategies.SnakeCaseStrategy())
-          .registerModule(new JavaTimeModule())
-          .writeValueAsString(content);
-    } catch (final Exception ex) {
-      log.error(SERIALIZATION_ERROR_MESSAGE, ex);
-      throw new IllegalArgumentException(ex);
+    public static <T> T deserializeFromSnakeCase(final String content, final Class<T> valueType) {
+        return getMapperSerialize(content, valueType, true);
     }
-  }
 
-  private static <T> T getMapperSerialize(
-      final String content, final Class<T> valueType, final boolean fromSnakeCase) {
-    try {
-
-      if (StringUtils.isBlank(content)) {
-        return valueType.getDeclaredConstructor().newInstance();
-      }
-
-      return new ObjectMapper()
-          .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-          .setPropertyNamingStrategy(
-              fromSnakeCase
-                  ? new PropertyNamingStrategies.SnakeCaseStrategy()
-                  : new PropertyNamingStrategies.LowerCamelCaseStrategy())
-          .registerModule(new JavaTimeModule())
-          .readValue(content, valueType);
-    } catch (final Exception ex) {
-      log.warn(SERIALIZATION_ERROR_MESSAGE, ex);
-      throw new IllegalArgumentException(ex);
+    public static String serializeToCamelCase(final Object content) {
+        try {
+            return new ObjectMapper()
+                    .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+                    // Note: Force jackson to only serialize field and not getters.
+                    .setVisibility(PropertyAccessor.ALL, Visibility.NONE)
+                    .setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
+                    .setPropertyNamingStrategy(new PropertyNamingStrategies.LowerCamelCaseStrategy())
+                    .registerModule(new JavaTimeModule())
+                    .writeValueAsString(content);
+        } catch (final Exception ex) {
+            log.error(SERIALIZATION_ERROR_MESSAGE, ex);
+            throw new IllegalArgumentException(ex);
+        }
     }
-  }
+
+    public static String serializeToSnakeCase(final Object content) {
+        try {
+            return new ObjectMapper()
+                    .configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false)
+                    // Note: Force jackson to only serialize field and not getters.
+                    .setVisibility(PropertyAccessor.ALL, Visibility.NONE)
+                    .setVisibility(PropertyAccessor.FIELD, Visibility.ANY)
+                    .setPropertyNamingStrategy(new PropertyNamingStrategies.SnakeCaseStrategy())
+                    .registerModule(new JavaTimeModule())
+                    .writeValueAsString(content);
+        } catch (final Exception ex) {
+            log.error(SERIALIZATION_ERROR_MESSAGE, ex);
+            throw new IllegalArgumentException(ex);
+        }
+    }
+
+    private static <T> T getMapperSerialize(
+            final String content, final Class<T> valueType, final boolean fromSnakeCase) {
+        try {
+
+            if (StringUtils.isBlank(content)) {
+                return valueType.getDeclaredConstructor().newInstance();
+            }
+
+            return new ObjectMapper()
+                    .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+                    .setPropertyNamingStrategy(
+                            fromSnakeCase
+                                    ? new PropertyNamingStrategies.SnakeCaseStrategy()
+                                    : new PropertyNamingStrategies.LowerCamelCaseStrategy())
+                    .registerModule(new JavaTimeModule())
+                    .readValue(content, valueType);
+        } catch (final Exception ex) {
+            log.warn(SERIALIZATION_ERROR_MESSAGE, ex);
+            throw new IllegalArgumentException(ex);
+        }
+    }
 }

@@ -9,8 +9,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
-
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -19,10 +17,10 @@ import java.util.Date;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = SysResourceDO.TABLE_NAME)
-public class SysResourceDO  extends BaseEntity {
+public class SysResourceDO extends BaseEntity {
     public static final String TABLE_NAME = "sys_resource";
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "parent_id", nullable = false)
@@ -80,8 +78,7 @@ public class SysResourceDO  extends BaseEntity {
     @Column(name = "open_type")
     private String openType;
 
-    @Column(name = "tenant_id")
-    private Long tenantId;
+
 
     // getters and setters
 }

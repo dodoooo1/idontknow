@@ -13,7 +13,6 @@ public class UpdateSysResourceRequest {
     private Boolean keepAlive;
     private Boolean hidden;
     private String openType;
-    private Long tenantId;
 
     // getters and setters
 }

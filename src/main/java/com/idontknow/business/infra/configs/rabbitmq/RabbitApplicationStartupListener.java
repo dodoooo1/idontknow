@@ -10,16 +10,17 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RabbitApplicationStartupListener
-    implements ApplicationListener<ApplicationReadyEvent> {
+        implements ApplicationListener<ApplicationReadyEvent> {
 
-  @Autowired RabbitListenerEndpointRegistry registry;
+    @Autowired
+    RabbitListenerEndpointRegistry registry;
 
-  /**
-   * This event is executed as late as conceivably possible to indicate that the application is
-   * ready to services requests.
-   */
-  @Override
-  public void onApplicationEvent(final @NonNull ApplicationReadyEvent event) {
-    this.registry.getListenerContainer(EventListener.RABBIT_ASYNC_EVENT_LISTENER_ID).start();
-  }
+    /**
+     * This event is executed as late as conceivably possible to indicate that the application is
+     * ready to services requests.
+     */
+    @Override
+    public void onApplicationEvent(final @NonNull ApplicationReadyEvent event) {
+        this.registry.getListenerContainer(EventListener.RABBIT_ASYNC_EVENT_LISTENER_ID).start();
+    }
 }

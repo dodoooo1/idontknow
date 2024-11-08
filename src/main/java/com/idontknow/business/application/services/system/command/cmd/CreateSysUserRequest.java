@@ -1,10 +1,6 @@
 package com.idontknow.business.application.services.system.command.cmd;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
+import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
 
@@ -15,25 +11,19 @@ import java.time.LocalDateTime;
  * @author: glory
  * @date: 2024/10/24 10:13
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@SuperBuilder
-public class CreateSysUserRequest {
-    private Long id;
-    private String username;
-    private String password;
-    private String salt;
-    private String phone;
-    private String avatar;
-    private String nickname;
-    private String name;
-    private String email;
-    private String createdBy;
-    private String updatedBy;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-    private String status;
-    private Long tenantId;
+public record CreateSysUserRequest (
+        @NotBlank(message = "Username cannot be empty!")
+        String username,
+        @NotBlank(message = "Password cannot be empty!")
+        String password,
+        String phone,
+        String nickname,
+        @NotBlank(message = "Name cannot be empty!")
+        String name,
+        @NotBlank(message = "Email cannot be empty!")
+        String email,
+         String createdBy,
+                 String updatedBy,
+                 LocalDateTime createdAt,
+                 LocalDateTime updatedAt) {
 }

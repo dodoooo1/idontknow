@@ -9,8 +9,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
-
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -19,10 +17,10 @@ import java.util.Date;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = SysDepartmentDO.TABLE_NAME)
-public class SysDepartmentDO  extends BaseEntity {
+public class SysDepartmentDO extends BaseEntity {
     public static final String TABLE_NAME = "sys_department";
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "parent_id", nullable = false)
@@ -55,8 +53,7 @@ public class SysDepartmentDO  extends BaseEntity {
     @Column(name = "remarks")
     private String remarks;
 
-    @Column(name = "tenant_id")
-    private Long tenantId;
+
 
     @Column(name = "iz_leaf")
     private Boolean izLeaf;

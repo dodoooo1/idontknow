@@ -14,17 +14,17 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class EventListener {
 
-  public static final String RABBIT_ASYNC_EVENT_LISTENER_ID = "EventListener";
+    public static final String RABBIT_ASYNC_EVENT_LISTENER_ID = "EventListener";
 
-  @Value("${rabbitmq.listeners.event.queue}")
-  private String queueName;
+    @Value("${rabbitmq.listeners.event.queue}")
+    private String queueName;
 
-  @RabbitListener(
-      id = RABBIT_ASYNC_EVENT_LISTENER_ID,
-      containerFactory = RabbitConfig.RABBIT_ASYNC_EVENT_LISTENER_FACTORY,
-      queues = "${rabbitmq.listeners.event.queue}")
-  public Mono<Void> process(final Message<?> message) {
-    log.info("[RABBITMQ][SUB][{}] {}", this.queueName, message);
-    return Mono.empty();
-  }
+    @RabbitListener(
+            id = RABBIT_ASYNC_EVENT_LISTENER_ID,
+            containerFactory = RabbitConfig.RABBIT_ASYNC_EVENT_LISTENER_FACTORY,
+            queues = "${rabbitmq.listeners.event.queue}")
+    public Mono<Void> process(final Message<?> message) {
+        log.info("[RABBITMQ][SUB][{}] {}", this.queueName, message);
+        return Mono.empty();
+    }
 }

@@ -12,14 +12,14 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @RequiredArgsConstructor
 public class InterceptorConfig implements WebMvcConfigurer {
 
-  @Value("${miscellaneous.max-response-time-to-log-in-ms}")
-  private final int maxResponseTimeToLogInMs;
+    @Value("${miscellaneous.max-response-time-to-log-in-ms}")
+    private final int maxResponseTimeToLogInMs;
 
-  @Override
-  public void addInterceptors(final InterceptorRegistry registry) {
-    registry.addInterceptor(new TimeExecutionInterceptor()).addPathPatterns("/**");
-    registry
-        .addInterceptor(new LogSlowResponseTimeInterceptor(this.maxResponseTimeToLogInMs))
-        .addPathPatterns("/**");
-  }
+    @Override
+    public void addInterceptors(final InterceptorRegistry registry) {
+        registry.addInterceptor(new TimeExecutionInterceptor()).addPathPatterns("/**");
+        registry
+                .addInterceptor(new LogSlowResponseTimeInterceptor(this.maxResponseTimeToLogInMs))
+                .addPathPatterns("/**");
+    }
 }

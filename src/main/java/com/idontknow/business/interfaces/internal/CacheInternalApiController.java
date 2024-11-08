@@ -16,23 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CacheInternalApiController {
 
-  public static final String BASE_URL = AppUrls.INTERNAL + "/caches";
+    public static final String BASE_URL = AppUrls.INTERNAL + "/caches";
 
-  private final LocalCacheManagerService localCacheManagerService;
+    private final LocalCacheManagerService localCacheManagerService;
 
-  @DeleteMapping
-  public ResponseEntity<Void> clearCaches() {
-    log.info("[request] clearing all local caches");
-    this.localCacheManagerService.evictAll();
-    return ResponseEntity.ok().build();
-  }
+    @DeleteMapping
+    public ResponseEntity<Void> clearCaches() {
+        log.info("[request] clearing all local caches");
+        this.localCacheManagerService.evictAll();
+        return ResponseEntity.ok().build();
+    }
 
-  @DeleteMapping("/{cache-name}")
-  public ResponseEntity<Void> clearCaches(@PathVariable("cache-name") final String cacheName) {
-    log.info("[request] clearing local cache '{}'", cacheName);
-    this.localCacheManagerService.evictByName(cacheName);
-    return ResponseEntity.ok().build();
-  }
+    @DeleteMapping("/{cache-name}")
+    public ResponseEntity<Void> clearCaches(@PathVariable("cache-name") final String cacheName) {
+        log.info("[request] clearing local cache '{}'", cacheName);
+        this.localCacheManagerService.evictByName(cacheName);
+        return ResponseEntity.ok().build();
+    }
 
 
 }

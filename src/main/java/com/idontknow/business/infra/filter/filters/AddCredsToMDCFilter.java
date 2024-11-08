@@ -19,33 +19,33 @@ import java.io.IOException;
 @Component
 public class AddCredsToMDCFilter extends OncePerRequestFilter {
 
-  private static final String USER_MDC_KEY = "user";
-  private static final String COMPANY_MDC_KEY = "company";
+    private static final String USER_MDC_KEY = "user";
+    private static final String COMPANY_MDC_KEY = "company";
 
-  @Override
-  protected void doFilterInternal(
-      final @NonNull HttpServletRequest request,
-      final @NonNull HttpServletResponse response,
-      final FilterChain filterChain)
-      throws ServletException, IOException {
+    @Override
+    protected void doFilterInternal(
+            final @NonNull HttpServletRequest request,
+            final @NonNull HttpServletResponse response,
+            final FilterChain filterChain)
+            throws ServletException, IOException {
 
-    MDC.put(USER_MDC_KEY, AuthFacade.getUserEmail());
+        MDC.put(USER_MDC_KEY, AuthFacade.getUserEmail());
 
-    try {
-      filterChain.doFilter(request, response);
-    } finally {
-      MDC.remove(USER_MDC_KEY);
-      MDC.remove(COMPANY_MDC_KEY);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            MDC.remove(USER_MDC_KEY);
+            MDC.remove(COMPANY_MDC_KEY);
+        }
     }
-  }
 
-  @Override
-  protected boolean shouldNotFilterAsyncDispatch() {
-    return false;
-  }
+    @Override
+    protected boolean shouldNotFilterAsyncDispatch() {
+        return false;
+    }
 
-  @Override
-  protected boolean shouldNotFilterErrorDispatch() {
-    return false;
-  }
+    @Override
+    protected boolean shouldNotFilterErrorDispatch() {
+        return false;
+    }
 }

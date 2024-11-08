@@ -14,11 +14,11 @@ jobs:
     permissions:
       # required for all workflows
       security-events: write
-      
+
       # only required for workflows in private repositories
       actions: read
       contents: read
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,10 +32,10 @@ jobs:
         uses: github/codeql-action/init@v3
         with:
           languages: java
-      
+
       - name: Autobuild
         uses: github/codeql-action/autobuild@v3
-      
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3
         with:

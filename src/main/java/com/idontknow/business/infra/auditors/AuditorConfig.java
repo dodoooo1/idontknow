@@ -1,9 +1,6 @@
 package com.idontknow.business.infra.auditors;
 
-import java.util.Optional;
-
 import com.idontknow.business.facades.AuthFacade;
-import com.idontknow.business.infra.configs.security.auth.providers.JwtTokenService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -13,24 +10,26 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import java.util.Optional;
+
 @Configuration(proxyBeanMethods = false)
 @EnableJpaAuditing(auditorAwareRef = "auditorProvider")
 public class AuditorConfig {
 
-  @Bean
-  public AuditorAware<String> auditorProvider() {
-    return new AuditorAwareImpl();
-  }
-
-  public static class AuditorAwareImpl implements AuditorAware<String> {
-
-    @Override
-    public @NonNull Optional<String> getCurrentAuditor() {
-
-      return Optional.ofNullable(SecurityContextHolder.getContext())
-          .map(SecurityContext::getAuthentication)
-          .filter(Authentication::isAuthenticated)
-          .flatMap(authentication -> AuthFacade.getUserEmailOptional());
+    @Bean
+    public AuditorAware<String> auditorProvider() {
+        return new AuditorAwareImpl();
     }
-  }
+
+    public static class AuditorAwareImpl implements AuditorAware<String> {
+
+        @Override
+        public @NonNull Optional<String> getCurrentAuditor() {
+
+            return Optional.ofNullable(SecurityContextHolder.getContext())
+                    .map(SecurityContext::getAuthentication)
+                    .filter(Authentication::isAuthenticated)
+                    .flatMap(authentication -> AuthFacade.getUserEmailOptional());
+        }
+    }
 }

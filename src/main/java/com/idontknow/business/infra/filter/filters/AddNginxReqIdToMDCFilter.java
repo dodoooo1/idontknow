@@ -19,35 +19,35 @@ import java.io.IOException;
 @Component
 public class AddNginxReqIdToMDCFilter extends OncePerRequestFilter {
 
-  private static final String NGINX_REQUEST_ID_HEADER = "X-Request-ID";
+    private static final String NGINX_REQUEST_ID_HEADER = "X-Request-ID";
 
-  @Override
-  protected void doFilterInternal(
-      final @NonNull HttpServletRequest request,
-      final @NonNull HttpServletResponse response,
-      final FilterChain filterChain)
-      throws ServletException, IOException {
+    @Override
+    protected void doFilterInternal(
+            final @NonNull HttpServletRequest request,
+            final @NonNull HttpServletResponse response,
+            final FilterChain filterChain)
+            throws ServletException, IOException {
 
-    final String nginxRequestId = request.getHeader(NGINX_REQUEST_ID_HEADER);
+        final String nginxRequestId = request.getHeader(NGINX_REQUEST_ID_HEADER);
 
-    MDC.put(
-        NGINX_REQUEST_ID_HEADER,
-        StringUtils.isNotBlank(nginxRequestId) ? nginxRequestId : StringUtils.EMPTY);
+        MDC.put(
+                NGINX_REQUEST_ID_HEADER,
+                StringUtils.isNotBlank(nginxRequestId) ? nginxRequestId : StringUtils.EMPTY);
 
-    try {
-      filterChain.doFilter(request, response);
-    } finally {
-      MDC.remove(NGINX_REQUEST_ID_HEADER);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            MDC.remove(NGINX_REQUEST_ID_HEADER);
+        }
     }
-  }
 
-  @Override
-  protected boolean shouldNotFilterAsyncDispatch() {
-    return false;
-  }
+    @Override
+    protected boolean shouldNotFilterAsyncDispatch() {
+        return false;
+    }
 
-  @Override
-  protected boolean shouldNotFilterErrorDispatch() {
-    return false;
-  }
+    @Override
+    protected boolean shouldNotFilterErrorDispatch() {
+        return false;
+    }
 }

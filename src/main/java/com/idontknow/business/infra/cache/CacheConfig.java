@@ -7,7 +7,8 @@ package com.idontknow.business.infra.cache;
  * @author: glory
  * @date: 2024/10/24 21:41
  */
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.redisson.api.RedissonClient;
 import org.redisson.spring.cache.RedissonSpringCacheManager;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -16,15 +17,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.cache.RedisCacheConfiguration;
-import org.springframework.data.redis.cache.RedisCacheManager;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import com.github.benmanes.caffeine.cache.Caffeine;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisSerializationContext;
-import org.springframework.data.redis.serializer.StringRedisSerializer;
 
-import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 
 @Configuration
@@ -33,12 +26,14 @@ public class CacheConfig {
 
     // 配置 Caffeine CacheManager
     @Bean
-    public CacheManager cacheManager() {
+    @ConditionalOnProperty(name = "spring.cache.type", havingValue = "caffeine", matchIfMissing = true)
+    CacheManager cacheManager(Caffeine<Object, Object> caffeine) {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager("CaffeineCache");
-        cacheManager.setCaffeine(caffeineCacheBuilder());
+        cacheManager.setCaffeine(caffeine);
         return cacheManager;
     }
 
+    @Bean(name = "caffeine")
     Caffeine<Object, Object> caffeineCacheBuilder() {
         return Caffeine.newBuilder()
                 .expireAfterWrite(10, TimeUnit.MINUTES)
@@ -48,7 +43,8 @@ public class CacheConfig {
 
     // 配置 Redis CacheManager
     @Bean
-    public CacheManager redisCacheManager(RedissonClient redissonClient) {
+    @ConditionalOnProperty(name = "spring.cache.type", havingValue = "redis")
+    public RedissonSpringCacheManager redisCacheManager(RedissonClient redissonClient) {
         return new RedissonSpringCacheManager(redissonClient);
 
     }

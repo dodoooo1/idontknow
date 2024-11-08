@@ -8,4 +8,5 @@ import java.io.Serializable;
 
 @Builder
 public record ApiErrorDetails(@JsonInclude(Include.NON_NULL) String pointer, String reason)
-    implements Serializable {}
+        implements Serializable {
+}

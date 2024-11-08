@@ -11,4 +11,5 @@ import java.lang.annotation.RetentionPolicy;
 @Mapping(target = "updatedBy", ignore = true)
 @Mapping(target = "createdAt", ignore = true)
 @Mapping(target = "updatedAt", ignore = true)
-public @interface ToEntity {}
+public @interface ToEntity {
+}

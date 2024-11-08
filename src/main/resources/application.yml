@@ -109,6 +109,8 @@ rabbitmq:
 server:
   shutdown: graceful
   port: 8082
+  servlet:
+    context-path: /api
 ---
 spring:
   profiles:

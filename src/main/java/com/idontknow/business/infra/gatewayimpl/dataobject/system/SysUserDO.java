@@ -2,15 +2,16 @@ package com.idontknow.business.infra.gatewayimpl.dataobject.system;
 
 import com.idontknow.business.infra.gatewayimpl.dataobject.base.BaseEntity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
+import java.util.Set;
 
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,7 +21,7 @@ import java.time.LocalDateTime;
 public class SysUserDO extends BaseEntity {
     public static final String TABLE_NAME = "sys_user";
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false, length = 64)
@@ -47,6 +48,16 @@ public class SysUserDO extends BaseEntity {
     @Column(nullable = false, length = 128)
     private String email;
 
-    @Column(nullable = false)
-    private Long tenantId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private SysDepartmentDO department;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "sys_user_role",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<SysRoleDO> roles;
 }

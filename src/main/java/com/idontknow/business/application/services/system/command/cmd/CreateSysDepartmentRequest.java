@@ -11,7 +11,6 @@ public class CreateSysDepartmentRequest {
     private String mobile;
     private String address;
     private String status;
-    private Long tenantId;
 
     // getters and setters
 }

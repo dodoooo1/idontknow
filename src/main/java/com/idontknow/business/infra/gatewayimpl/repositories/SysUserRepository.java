@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SysUserRepository extends JpaRepository<SysUserDO, Long>, QuerydslPredicateExecutor<SysUserDO> {
-    SysUserDO findByUsername(String username);
+
 }

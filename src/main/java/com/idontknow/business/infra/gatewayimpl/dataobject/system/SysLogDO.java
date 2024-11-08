@@ -9,8 +9,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.Date;
-
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -19,10 +17,10 @@ import java.util.Date;
 @AllArgsConstructor
 @SuperBuilder
 @Table(name = SysResourceDO.TABLE_NAME)
-public class SysLogDO  extends BaseEntity {
+public class SysLogDO extends BaseEntity {
     public static final String TABLE_NAME = "sys_log";
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "module_name", nullable = false)

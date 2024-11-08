@@ -25,258 +25,266 @@ import static java.lang.String.format;
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 @Slf4j
-@Transactional(readOnly = true)
-public abstract class BaseGateway<E extends BaseEntity> {
+public abstract class BaseGateway<D extends BaseEntity> {
 
-  private static final int ENTITY_MAX_SIZE_TO_LOG = 100;
+    private static final int ENTITY_MAX_SIZE_TO_LOG = 100;
 
-  @Autowired private ApplicationEventPublisher applicationEventPublisher;
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
-  public abstract JpaRepository<E, Long> getRepository();
+    public abstract JpaRepository<D, Long> getRepository();
 
-  public E findById(final Long id) {
-    log.debug("[retrieving] {} {}", this.getEntityName(), id);
-    return this.getRepository().findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
-  }
-
-  public Optional<E> findByIdOptional(final Long id) {
-    log.debug("[retrieving] {} {}", this.getEntityName(), id);
-    return this.getRepository().findById(id);
-  }
-
-  public List<E> findAll() {
-    log.debug("[retrieving] all {}", this.getEntityName());
-    return this.getRepository().findAll();
-  }
-
-  public Page<E> findAll(final Pageable pageable) {
-    log.debug("[retrieving] all {}", this.getEntityName());
-    return this.getRepository().findAll(pageable);
-  }
-
-  @Transactional
-  public E create(final E entity) {
-    return this.createAll(List.of(entity)).getFirst();
-  }
-
-  @Transactional
-  public List<E> createAll(final List<E> entities) {
-    return this.createAll(entities, false);
-  }
-
-  @Transactional
-  public List<E> createAll(final List<E> entities, final boolean skipActivities) {
-    return this.saveAll(entities, skipActivities, ServiceOperation.CREATING);
-  }
-
-  @Transactional
-  public E update(final E entity) {
-    return this.updateAll(List.of(entity)).getFirst();
-  }
-
-  @Transactional
-  public List<E> updateAll(final List<E> entities) {
-    return this.updateAll(entities, false);
-  }
-
-  @Transactional
-  public List<E> updateAll(final List<E> entities, final boolean skipActivities) {
-    return this.saveAll(entities, skipActivities, ServiceOperation.UPDATING);
-  }
-
-  @Transactional
-  public List<E> saveAll(
-      @NonNull final List<E> entities,
-      final boolean skipActivities,
-      final ServiceOperation operation) {
-
-    if (isEmpty(entities)) {
-      log.info("[{}] empty entities, returning.", operation.getName());
-      return Collections.emptyList();
+    public D findById(final Long id) {
+        log.debug("[retrieving] {} {}", this.getEntityName(), id);
+        return this.getRepository().findById(id).orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    switch (operation) {
-      case CREATING -> {
-        if (entities.stream()
-            .map(entity -> entity.getId() != null)
-            .toList()
-            .contains(Boolean.TRUE)) {
-          throw new IllegalStateException(
-              "Some entities already have an id. Are you trying to create an existing entity?");
+    public Optional<D> findByIdOptional(final Long id) {
+        log.debug("[retrieving] {} {}", this.getEntityName(), id);
+        return this.getRepository().findById(id);
+    }
+
+    public List<D> findAll() {
+        log.debug("[retrieving] all {}", this.getEntityName());
+        return this.getRepository().findAll();
+    }
+
+    public Page<D> findAll(final Pageable pageable) {
+        log.debug("[retrieving] all {}", this.getEntityName());
+        return this.getRepository().findAll(pageable);
+    }
+
+    @Transactional
+    public D create(final D entity) {
+        return this.createAll(List.of(entity)).getFirst();
+    }
+
+    @Transactional
+    public List<D> createAll(final List<D> entities) {
+        return this.createAll(entities, false);
+    }
+
+    @Transactional
+    public List<D> createAll(final List<D> entities, final boolean skipActivities) {
+        return this.saveAll(entities, skipActivities, ServiceOperation.CREATING);
+    }
+
+    @Transactional
+    public D update(final D entity) {
+        return this.updateAll(List.of(entity)).getFirst();
+    }
+
+    @Transactional
+    public List<D> updateAll(final List<D> entities) {
+        return this.updateAll(entities, false);
+    }
+
+    @Transactional
+    public List<D> updateAll(final List<D> entities, final boolean skipActivities) {
+        return this.saveAll(entities, skipActivities, ServiceOperation.UPDATING);
+    }
+
+    @Transactional
+    public List<D> saveAll(
+            @NonNull final List<D> entities,
+            final boolean skipActivities,
+            final ServiceOperation operation) {
+
+        if (isEmpty(entities)) {
+            log.info("[{}] empty entities, returning.", operation.getName());
+            return Collections.emptyList();
         }
-      }
-      case UPDATING -> {
-        if (entities.stream()
-            .map(entity -> entity.getId() == null)
-            .toList()
-            .contains(Boolean.TRUE)) {
-          throw new IllegalStateException(
-              "Some entities does not have id. Are you trying to update a new entity?");
+
+        switch (operation) {
+            case CREATING -> {
+                if (entities.stream()
+                        .map(entity -> entity.getId() != null)
+                        .toList()
+                        .contains(Boolean.TRUE)) {
+                    throw new IllegalStateException(
+                            "Some entities already have an id. Are you trying to create an existing entity?");
+                }
+            }
+            case UPDATING -> {
+                if (entities.stream()
+                        .map(entity -> entity.getId() == null)
+                        .toList()
+                        .contains(Boolean.TRUE)) {
+                    throw new IllegalStateException(
+                            "Some entities does not have id. Are you trying to update a new entity?");
+                }
+            }
+            default -> throw new IllegalStateException("ServiceOperation not found");
         }
-      }
-      default -> throw new IllegalStateException("ServiceOperation not found");
-    }
 
-    log.info(
-        "[{}] {} {}", operation.getName(), this.getEntityName(), this.getEntitiesToLog(entities));
+        log.info(
+                "[{}] {} {}", operation.getName(), this.getEntityName(), this.getEntitiesToLog(entities));
 
-    if (!skipActivities) {
-      switch (operation) {
-        case CREATING -> this.activitiesBeforeCreateEntities(entities);
-        case UPDATING -> this.activitiesBeforeUpdateEntities(entities);
-        default -> throw new IllegalStateException("ServiceOperation not found");
-      }
-    }
-
-    // Used to improve cache management since saveAll will reset the entire cache.
-    if (entities.size() == 1) {
-      this.getRepository().save(entities.getFirst());
-    } else {
-      this.getRepository().saveAll(entities);
-    }
-
-    if (!skipActivities) {
-      switch (operation) {
-        case CREATING -> this.activitiesAfterCreateEntities(entities);
-        case UPDATING -> this.activitiesAfterUpdateEntities(entities);
-        default -> throw new IllegalStateException("ServiceOperation not found");
-      }
-    }
-
-    this.applicationEventPublisher.publishEvent(
-        new EntityTransactionLogListener.EntityTransactionLogEvent(
+        if (!skipActivities) {
             switch (operation) {
-              case CREATING -> EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.CREATE;
-              case UPDATING -> EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.UPDATE;
-              default -> throw new IllegalStateException("ServiceOperation not found");
-            },
-            this.getEntityName(),
-            this.getEventEntitiesToLog(entities)));
+                case CREATING -> this.activitiesBeforeCreateEntities(entities);
+                case UPDATING -> this.activitiesBeforeUpdateEntities(entities);
+                default -> throw new IllegalStateException("ServiceOperation not found");
+            }
+        }
 
-    return entities;
-  }
+        // Used to improve cache management since saveAll will reset the entire cache.
+        if (entities.size() == 1) {
+            this.getRepository().save(entities.getFirst());
+        } else {
+            this.getRepository().saveAll(entities);
+        }
 
-  @Transactional
-  public void delete(final Long id) {
-    this.delete(this.findById(id));
-  }
+        if (!skipActivities) {
+            switch (operation) {
+                case CREATING -> this.activitiesAfterCreateEntities(entities);
+                case UPDATING -> this.activitiesAfterUpdateEntities(entities);
+                default -> throw new IllegalStateException("ServiceOperation not found");
+            }
+        }
 
-  @Transactional
-  public void delete(final E entity) {
-    this.deleteAll(List.of(entity), false);
-  }
+        this.applicationEventPublisher.publishEvent(
+                new EntityTransactionLogListener.EntityTransactionLogEvent(
+                        switch (operation) {
+                            case CREATING ->
+                                    EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.CREATE;
+                            case UPDATING ->
+                                    EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.UPDATE;
+                            default -> throw new IllegalStateException("ServiceOperation not found");
+                        },
+                        this.getEntityName(),
+                        this.getEventEntitiesToLog(entities)));
 
-  @Transactional
-  public void deleteAll(final List<E> entities, final boolean skipActivities) {
-
-    if (isEmpty(entities)) {
-      log.info("[{}] empty entities, returning.", ServiceOperation.DELETING.getName());
-      return;
+        return entities;
     }
 
-    final List<Long> ids =
-        entities.stream().map(BaseEntity::getId).filter(Objects::nonNull).toList();
-    if (entities.size() != ids.size()) {
-      throw new IllegalStateException(
-          "Some entities does not have id. Are you trying to delete a new entity?");
+    @Transactional
+    public void delete(final Long id) {
+        this.delete(this.findById(id));
     }
 
-    log.info(
-        "[{}] {} {}", ServiceOperation.DELETING.getName(), this.getEntityName(), this.getEntitiesToLog(entities));
-
-    if (!skipActivities) {
-      this.activitiesBeforeDeleteEntities(entities);
+    @Transactional
+    public void delete(final D entity) {
+        this.deleteAll(List.of(entity), false);
     }
 
-    // Used to improve cache management since deleteAll will reset the entire cache.
-    if (entities.size() == 1) {
-      this.getRepository().delete(entities.getFirst());
-    } else {
-      this.getRepository().deleteAll(entities);
+    @Transactional
+    public void deleteAll(final List<D> entities, final boolean skipActivities) {
+
+        if (isEmpty(entities)) {
+            log.info("[{}] empty entities, returning.", ServiceOperation.DELETING.getName());
+            return;
+        }
+
+        final List<Long> ids =
+                entities.stream().map(BaseEntity::getId).filter(Objects::nonNull).toList();
+        if (entities.size() != ids.size()) {
+            throw new IllegalStateException(
+                    "Some entities does not have id. Are you trying to delete a new entity?");
+        }
+
+        log.info(
+                "[{}] {} {}", ServiceOperation.DELETING.getName(), this.getEntityName(), this.getEntitiesToLog(entities));
+
+        if (!skipActivities) {
+            this.activitiesBeforeDeleteEntities(entities);
+        }
+
+        // Used to improve cache management since deleteAll will reset the entire cache.
+        if (entities.size() == 1) {
+            this.getRepository().delete(entities.getFirst());
+        } else {
+            this.getRepository().deleteAll(entities);
+        }
+
+        if (!skipActivities) {
+            this.activitiesAfterDeleteEntities(ids);
+        }
+
+        this.applicationEventPublisher.publishEvent(
+                new EntityTransactionLogListener.EntityTransactionLogEvent(
+                        EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.DELETE, this.getEntityName(), this.getEventEntitiesToLog(entities)));
     }
 
-    if (!skipActivities) {
-      this.activitiesAfterDeleteEntities(ids);
+    /*
+     * Create activities
+     * */
+    protected void activitiesBeforeCreateEntity(final D entity) {
     }
 
-    this.applicationEventPublisher.publishEvent(
-        new EntityTransactionLogListener.EntityTransactionLogEvent(
-            EntityTransactionLogListener.EntityTransactionLogEvent.EntityTransactionLogEnum.DELETE, this.getEntityName(), this.getEventEntitiesToLog(entities)));
-  }
+    protected void activitiesBeforeCreateEntities(final List<D> entities) {
+        entities.forEach(this::activitiesBeforeCreateEntity);
+    }
 
-  /*
-   * Create activities
-   * */
-  protected void activitiesBeforeCreateEntity(final E entity) {}
+    protected void activitiesAfterCreateEntity(final D entity) {
+    }
 
-  protected void activitiesBeforeCreateEntities(final List<E> entities) {
-    entities.forEach(this::activitiesBeforeCreateEntity);
-  }
+    protected final void activitiesAfterCreateEntities(final List<D> entities) {
+        entities.forEach(this::activitiesAfterCreateEntity);
+    }
 
-  protected void activitiesAfterCreateEntity(final E entity) {}
+    /*
+     * Update activities
+     * */
+    protected void activitiesBeforeUpdateEntity(final D entity) {
+    }
 
-  protected final void activitiesAfterCreateEntities(final List<E> entities) {
-    entities.forEach(this::activitiesAfterCreateEntity);
-  }
+    protected void activitiesBeforeUpdateEntities(final List<D> entities) {
+        entities.forEach(this::activitiesBeforeUpdateEntity);
+    }
 
-  /*
-   * Update activities
-   * */
-  protected void activitiesBeforeUpdateEntity(final E entity) {}
+    protected void activitiesAfterUpdateEntity(final D entity) {
+    }
 
-  protected void activitiesBeforeUpdateEntities(final List<E> entities) {
-    entities.forEach(this::activitiesBeforeUpdateEntity);
-  }
+    protected void activitiesAfterUpdateEntities(final List<D> entities) {
+        entities.forEach(this::activitiesAfterUpdateEntity);
+    }
 
-  protected void activitiesAfterUpdateEntity(final E entity) {}
+    /*
+     * Delete activities
+     * */
+    protected void activitiesBeforeDeleteEntity(final D entity) {
+    }
 
-  protected void activitiesAfterUpdateEntities(final List<E> entities) {
-    entities.forEach(this::activitiesAfterUpdateEntity);
-  }
+    protected void activitiesBeforeDeleteEntities(final List<D> entities) {
+        entities.forEach(this::activitiesBeforeDeleteEntity);
+    }
 
-  /*
-   * Delete activities
-   * */
-  protected void activitiesBeforeDeleteEntity(final E entity) {}
+    protected void activitiesAfterDeleteEntity(final Long id) {
+    }
 
-  protected void activitiesBeforeDeleteEntities(final List<E> entities) {
-    entities.forEach(this::activitiesBeforeDeleteEntity);
-  }
+    protected void activitiesAfterDeleteEntities(final List<Long> ids) {
+        ids.forEach(this::activitiesAfterDeleteEntity);
+    }
 
-  protected void activitiesAfterDeleteEntity(final Long id) {}
+    private String getEntityName() {
+        final Class<D> entityModelClass =
+                (Class<D>)
+                        ((ParameterizedType) this.getClass().getGenericSuperclass())
+                                .getActualTypeArguments()[0];
+        final Table annotation = entityModelClass.getAnnotation(Table.class);
+        return annotation.name();
+    }
 
-  protected void activitiesAfterDeleteEntities(final List<Long> ids) {
-    ids.forEach(this::activitiesAfterDeleteEntity);
-  }
+    private String getEntitiesToLog(final List<D> entities) {
+        return entities.size() < ENTITY_MAX_SIZE_TO_LOG
+                ? entities.toString()
+                : format("with '%s' entities", entities.size());
+    }
 
-  private String getEntityName() {
-    final Class<E> entityModelClass =
-        (Class<E>)
-            ((ParameterizedType) this.getClass().getGenericSuperclass())
-                .getActualTypeArguments()[0];
-    final Table annotation = entityModelClass.getAnnotation(Table.class);
-    return annotation.name();
-  }
+    private String getEventEntitiesToLog(final List<D> entities) {
+        return entities.size() < ENTITY_MAX_SIZE_TO_LOG
+                ? entities.stream().map(e -> e.getId().toString()).toList().toString()
+                : format("with '%s' entities", entities.size());
+    }
 
-  private String getEntitiesToLog(final List<E> entities) {
-    return entities.size() < ENTITY_MAX_SIZE_TO_LOG
-        ? entities.toString()
-        : format("with '%s' entities", entities.size());
-  }
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    public enum ServiceOperation {
+        CREATING("creating"),
+        UPDATING("updating"),
+        DELETING("deleting");
 
-  private String getEventEntitiesToLog(final List<E> entities) {
-    return entities.size() < ENTITY_MAX_SIZE_TO_LOG
-        ? entities.stream().map(e -> e.getId().toString()).toList().toString()
-        : format("with '%s' entities", entities.size());
-  }
-
-  @Getter
-  @AllArgsConstructor(access = AccessLevel.PRIVATE)
-  public enum ServiceOperation {
-    CREATING("creating"),
-    UPDATING("updating"),
-    DELETING("deleting");
-
-    private final String name;
-  }
+        private final String name;
+    }
 }

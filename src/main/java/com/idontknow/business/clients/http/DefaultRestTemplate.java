@@ -8,8 +8,8 @@ import org.springframework.web.client.RestTemplate;
 @Configuration(proxyBeanMethods = false)
 public class DefaultRestTemplate {
 
-  @Bean
-  public RestTemplate restTemplate(final RestTemplateBuilder builder) {
-    return builder.build();
-  }
+    @Bean
+    public RestTemplate restTemplate(final RestTemplateBuilder builder) {
+        return builder.build();
+    }
 }

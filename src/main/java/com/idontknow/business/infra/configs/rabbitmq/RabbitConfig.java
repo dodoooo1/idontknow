@@ -16,59 +16,59 @@ import org.springframework.retry.support.RetryTemplate;
 @Configuration(proxyBeanMethods = false)
 public class RabbitConfig {
 
-  public static final String RABBIT_ASYNC_EVENT_LISTENER_FACTORY = "AsyncEventListener";
-  public static final String RABBIT_EVENT_PUBLISHER = "EventPublisher";
+    public static final String RABBIT_ASYNC_EVENT_LISTENER_FACTORY = "AsyncEventListener";
+    public static final String RABBIT_EVENT_PUBLISHER = "EventPublisher";
 
-  @Value("${rabbitmq.host}")
-  private String host;
+    @Value("${rabbitmq.host}")
+    private String host;
 
-  @Value("${rabbitmq.port}")
-  private int port;
+    @Value("${rabbitmq.port}")
+    private int port;
 
-  @Value("${rabbitmq.username}")
-  private String username;
+    @Value("${rabbitmq.username}")
+    private String username;
 
-  @Value("${rabbitmq.password}")
-  private String password;
+    @Value("${rabbitmq.password}")
+    private String password;
 
-  @Value("${rabbitmq.listeners.event.prefetch-count}")
-  private Integer prefetchCount;
+    @Value("${rabbitmq.listeners.event.prefetch-count}")
+    private Integer prefetchCount;
 
-  private ConnectionFactory connectionFactory(final String connectionName) {
-    final CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-    connectionFactory.setConnectionNameStrategy(conn -> connectionName);
+    private ConnectionFactory connectionFactory(final String connectionName) {
+        final CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        connectionFactory.setConnectionNameStrategy(conn -> connectionName);
 
-    connectionFactory.setHost(this.host);
-    connectionFactory.setPort(this.port);
-    connectionFactory.setUsername(this.username);
-    connectionFactory.setPassword(this.password);
+        connectionFactory.setHost(this.host);
+        connectionFactory.setPort(this.port);
+        connectionFactory.setUsername(this.username);
+        connectionFactory.setPassword(this.password);
 
-    return connectionFactory;
-  }
+        return connectionFactory;
+    }
 
-  @Bean(name = RABBIT_ASYNC_EVENT_LISTENER_FACTORY)
-  public DirectRabbitListenerContainerFactory eventListenerFactory() {
-    final DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
-    factory.setConnectionFactory(this.connectionFactory("api-event-publisher"));
-    factory.setMessageConverter(new Jackson2JsonMessageConverter());
-    factory.setObservationEnabled(true);
-    factory.setAutoStartup(false); // started at ApplicationReadyEvent
+    @Bean(name = RABBIT_ASYNC_EVENT_LISTENER_FACTORY)
+    public DirectRabbitListenerContainerFactory eventListenerFactory() {
+        final DirectRabbitListenerContainerFactory factory = new DirectRabbitListenerContainerFactory();
+        factory.setConnectionFactory(this.connectionFactory("api-event-publisher"));
+        factory.setMessageConverter(new Jackson2JsonMessageConverter());
+        factory.setObservationEnabled(true);
+        factory.setAutoStartup(false); // started at ApplicationReadyEvent
 
-    // https://docs.spring.io/spring-amqp/docs/current/reference/html/#async-listeners
-    factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
-    factory.setDefaultRequeueRejected(false);
-    factory.setPrefetchCount(this.prefetchCount);
-    return factory;
-  }
+        // https://docs.spring.io/spring-amqp/docs/current/reference/html/#async-listeners
+        factory.setAcknowledgeMode(AcknowledgeMode.MANUAL);
+        factory.setDefaultRequeueRejected(false);
+        factory.setPrefetchCount(this.prefetchCount);
+        return factory;
+    }
 
-  @Bean(name = RABBIT_EVENT_PUBLISHER)
-  public RabbitTemplate rabbitTemplate() {
-    final RabbitTemplate factory =
-        new RabbitTemplate(this.connectionFactory("api-event-publisher"));
-    factory.setMessageConverter(new Jackson2JsonMessageConverter());
-    factory.setObservationEnabled(true);
-    factory.setRetryTemplate(RetryTemplate.defaultInstance());
+    @Bean(name = RABBIT_EVENT_PUBLISHER)
+    public RabbitTemplate rabbitTemplate() {
+        final RabbitTemplate factory =
+                new RabbitTemplate(this.connectionFactory("api-event-publisher"));
+        factory.setMessageConverter(new Jackson2JsonMessageConverter());
+        factory.setObservationEnabled(true);
+        factory.setRetryTemplate(RetryTemplate.defaultInstance());
 
-    return factory;
-  }
+        return factory;
+    }
 }

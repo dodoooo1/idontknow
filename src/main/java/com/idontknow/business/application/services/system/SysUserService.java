@@ -1,14 +1,15 @@
 package com.idontknow.business.application.services.system;
 
-import com.idontknow.business.application.dto.LoginRequest;
-import com.idontknow.business.domain.entities.system.SysUserEntity;
+import com.idontknow.business.application.services.system.command.cmd.UpdateSysUserRequest;
+import com.idontknow.business.application.services.system.query.qry.SysUserResponse;
+import com.idontknow.business.domain.entities.system.SysUser;
 
 public interface SysUserService {
-    void create(SysUserEntity sysUserEntity);
+    void create(SysUser sysUser);
 
-    SysUserEntity findByUsername(String username);
+    SysUser findByUsername(String username);
 
-    SysUserEntity getCurrentUser();
+    SysUserResponse findById(String id);
 
-    String login(LoginRequest loginDto);
+    void updateStatus(UpdateSysUserRequest updateSysUserRequest);
 }
