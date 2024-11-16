@@ -47,6 +47,8 @@ public abstract class BaseEntity implements Serializable {
 
     @Column(name = "status", nullable = false)
     private String status;
+    @Column(name = "departmentId", nullable = false)
+    private String department_id;
 
     public abstract Long getId();
 }

@@ -1,9 +1,9 @@
 package com.idontknow.business.application.services.system;
 
-import com.idontknow.business.application.services.system.command.cmd.CreateSysUserRequest;
-import com.idontknow.business.application.services.system.command.cmd.UpdateSysUserRequest;
-import com.idontknow.business.application.services.system.query.qry.SysUserQuery;
-import com.idontknow.business.application.services.system.query.qry.SysUserResponse;
+import com.idontknow.business.application.services.system.dto.CreateSysUserRequest;
+import com.idontknow.business.application.services.system.dto.SysUserQuery;
+import com.idontknow.business.application.services.system.dto.SysUserResponse;
+import com.idontknow.business.application.services.system.dto.UpdateSysUserRequest;
 
 /**
  * @description:

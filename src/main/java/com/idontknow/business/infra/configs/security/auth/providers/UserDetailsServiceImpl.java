@@ -2,7 +2,9 @@ package com.idontknow.business.infra.configs.security.auth.providers;
 
 import com.idontknow.business.application.dto.AuthenticationUser;
 import com.idontknow.business.application.services.system.SysUserService;
-import com.idontknow.business.domain.entities.system.SysRoleEntity;
+import com.idontknow.business.application.services.system.dto.SysRoleResponse;
+import com.idontknow.business.application.services.system.dto.SysUserResponse;
+import com.idontknow.business.domain.entities.system.SysRole;
 import com.idontknow.business.domain.entities.system.SysUser;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,15 +24,15 @@ import java.util.Set;
 public class UserDetailsServiceImpl implements UserDetailsService {
     private final SysUserService sysUserService;
     public AuthenticationUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        SysUser user = sysUserService.findByUsername(username);
+        SysUserResponse user = sysUserService.loadUserByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("Invalid username or password.");
         }
-        return AuthenticationUser.builder().email(user.getEmail()).name(user.getName()).id(user.getId()).username(user.getUsername()).simpleGrantedAuthority(getAuthority(user.getRoles())).build();
+        return AuthenticationUser.builder().email(user.email()).name(user.name()).id(user.id()).username(user.username()).simpleGrantedAuthority(getAuthority(user.roles())).build();
 
     }
 
-    private List<SimpleGrantedAuthority> getAuthority(Set<SysRoleEntity> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getCode())).toList();
+    private List<SimpleGrantedAuthority> getAuthority(Set<SysRoleResponse> roles) {
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.code())).toList();
     }
 }

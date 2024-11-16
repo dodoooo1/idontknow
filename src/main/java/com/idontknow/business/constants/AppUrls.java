@@ -12,6 +12,7 @@ public class AppUrls {
 
     public static final String MANAGEMENT = "/management";
     public static final String USER = "/user";
+    public static final String ROLE = "/role";
     public static final String INTERNAL = "/internal";
 
     public static final String BACK_OFFICE = "/back-office";

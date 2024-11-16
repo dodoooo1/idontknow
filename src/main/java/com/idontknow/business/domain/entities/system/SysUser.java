@@ -30,7 +30,7 @@ public class SysUser {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String status;
-    private Set<SysRoleEntity> roles = new HashSet<>();
+    private Set<SysRole> roles = new HashSet<>();
 
     public void updatePassword(String newPassword) {
         this.password = newPassword;
@@ -38,5 +38,14 @@ public class SysUser {
     public void updateStatus( String status) {
         this.status = status;
 
+    }
+    public void addRole(SysRole role) {
+        if (!roles.contains(role)) {
+            roles.add(role);
+        }
+    }
+
+    public void removeRole(SysRole role) {
+        roles.remove(role);
     }
 }

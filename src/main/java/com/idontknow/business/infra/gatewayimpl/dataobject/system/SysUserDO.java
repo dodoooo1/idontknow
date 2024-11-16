@@ -1,5 +1,6 @@
 package com.idontknow.business.infra.gatewayimpl.dataobject.system;
 
+import com.idontknow.business.domain.entities.system.SysRole;
 import com.idontknow.business.infra.gatewayimpl.dataobject.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -47,12 +48,6 @@ public class SysUserDO extends BaseEntity {
 
     @Column(nullable = false, length = 128)
     private String email;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "department_id")
-    private SysDepartmentDO department;
-
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "sys_user_role",

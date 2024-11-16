@@ -9,6 +9,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.Set;
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -32,6 +34,7 @@ public class SysRoleDO extends BaseEntity {
     @Column(name = "description")
     private String description;
 
-
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
+    private Set<SysUserDO> users;
     // getters and setters
 }

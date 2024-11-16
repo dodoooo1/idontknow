@@ -1,6 +1,8 @@
 package com.idontknow.business.domain.gateway;
 
+import com.idontknow.business.application.services.system.dto.SysUserResponse;
 import com.idontknow.business.domain.entities.system.SysUser;
+import com.idontknow.business.infra.gatewayimpl.dataobject.system.SysUserDO;
 
 /**
  * 系统用户网关
@@ -18,4 +20,8 @@ public interface SysUserGateway {
     void update(SysUser sysUser);
 
      void delete(Long[] ids);
+
+    SysUserDO loadUserByUsername(String username);
+
+    SysUserDO findById(Long id);
 }
