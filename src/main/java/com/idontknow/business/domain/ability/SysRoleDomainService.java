@@ -1,17 +1,16 @@
 package com.idontknow.business.domain.ability;
 
 import com.idontknow.business.domain.entities.system.SysRole;
-import com.idontknow.business.domain.entities.system.SysUser;
 import com.idontknow.business.domain.gateway.SysRoleGateway;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  *
  */
 @Getter
-@Component
+@Service
 @RequiredArgsConstructor
 public class SysRoleDomainService {
 
@@ -25,6 +24,7 @@ public class SysRoleDomainService {
 
         gateway.create(sysUser);
     }
+
     public void update(SysRole sysRole) {
         gateway.update(sysRole);
     }

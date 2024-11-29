@@ -1,8 +1,8 @@
 package com.idontknow.business.application.services.system.dto;
 
-public class CreateSysDepartmentRequest {
+public class UpdateSysOrganizationRequest {
 
-    private Long parentId;
+    private Long id;
     private String name;
     private String description;
     private String type;

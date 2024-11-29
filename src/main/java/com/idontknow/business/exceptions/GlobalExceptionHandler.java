@@ -136,9 +136,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     */
 /*
-     *  When authorizing user at controller or services layer using @PreAuthorize it throws
-     * AccessDeniedException, and it's a developer's responsibility to catch it
-     * *//*
+ *  When authorizing user at controller or services layer using @PreAuthorize it throws
+ * AccessDeniedException, and it's a developer's responsibility to catch it
+ * *//*
 
     @ResponseStatus(HttpStatus.FORBIDDEN)
     @ExceptionHandler(AccessDeniedException.class)
@@ -170,10 +170,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     */
 /*
-     * Catch API defined exceptions
-     *  *//*
+ * Catch API defined exceptions
+ *  *//*
 
-    */
+ */
 /*@ExceptionHandler(RootException.class)
     public ResponseEntity<ProblemDetail> rootException(final RootException ex) {
         log.info(ex.getMessage(), ex);
@@ -204,8 +204,8 @@ log.info("rootException");
 
     */
 /*
-     * Fallback, catch all unknown API exceptions
-     *  *//*
+ * Fallback, catch all unknown API exceptions
+ *  *//*
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Throwable.class)

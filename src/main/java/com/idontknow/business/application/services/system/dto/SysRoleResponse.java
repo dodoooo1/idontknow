@@ -1,12 +1,10 @@
 package com.idontknow.business.application.services.system.dto;
 
-public record SysRoleResponse (
+public record SysRoleResponse(
         Long id,
         String name,
         String code,
         String description,
-        String status)
-
-{
+        String status) {
     // getters and setters
 }

@@ -31,7 +31,7 @@ public abstract class BaseEntity implements Serializable {
     private static final long serialVersionUID = 7677353645504602647L;
 
     @CreatedBy
-    @Column(nullable = false,updatable = false)
+    @Column(nullable = false, updatable = false)
     private String createdBy;
     @LastModifiedBy
     @Column(nullable = false)
@@ -47,8 +47,6 @@ public abstract class BaseEntity implements Serializable {
 
     @Column(name = "status", nullable = false)
     private String status;
-    @Column(name = "departmentId", nullable = false)
-    private String department_id;
 
     public abstract Long getId();
 }

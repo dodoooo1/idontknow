@@ -25,6 +25,8 @@ public class SysRoleDO extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "organization_id", nullable = false)
+    private Long organizationId;
     @Column(name = "name", nullable = false)
     private String name;
 

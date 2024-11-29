@@ -110,7 +110,7 @@ server:
   shutdown: graceful
   port: 8082
   servlet:
-    context-path: /api
+    context-path: /idontkown
 ---
 spring:
   profiles:

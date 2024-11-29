@@ -1,25 +1,15 @@
 package com.idontknow.business.infra.gatewayimpl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.idontknow.business.domain.entities.system.SysRole;
-import com.idontknow.business.domain.entities.system.SysUser;
 import com.idontknow.business.domain.gateway.SysRoleGateway;
-import com.idontknow.business.domain.gateway.SysUserGateway;
-import com.idontknow.business.infra.assembler.SysUserMapper;
 import com.idontknow.business.infra.gatewayimpl.dataobject.base.BaseGateway;
-import com.idontknow.business.infra.gatewayimpl.dataobject.system.QSysUserDO;
 import com.idontknow.business.infra.gatewayimpl.dataobject.system.SysRoleDO;
-import com.idontknow.business.infra.gatewayimpl.dataobject.system.SysUserDO;
 import com.idontknow.business.infra.gatewayimpl.repositories.SysRoleRepository;
-import com.idontknow.business.infra.gatewayimpl.repositories.SysUserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * @description:

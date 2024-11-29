@@ -165,7 +165,7 @@ public class InboundOrderRepositoryImpl implements InboundOrderRepository {
 
 ```java
 
-// interfaces/controller/InboundOrderController.java
+// adapter/controller/InboundOrderController.java
 package com.example.wms.interfaces.controller;
 
 import com.example.wms.application.service.InboundOrderService;

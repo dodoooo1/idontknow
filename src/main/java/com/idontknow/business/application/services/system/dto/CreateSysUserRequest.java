@@ -17,16 +17,12 @@ public record CreateSysUserRequest(
         String username,
         @NotBlank(message = "Password cannot be empty!")
         String password,
+        @NotBlank(message = "Phone cannot be empty!")
         String phone,
         String nickname,
-        @NotBlank(message = "Name cannot be empty!")
         String name,
         @NotBlank(message = "Email cannot be empty!")
         String email,
-        String createdBy,
-        String updatedBy,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt,
         Set<String> roleIds,
-        String departmentId) {
+        String organizationId) {
 }

@@ -23,6 +23,8 @@ public class SysDictDO extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "organization_id", nullable = false)
+    private Long organizationId;
     @Column(name = "dict_type", nullable = false, unique = true)
     private String dictType;
 

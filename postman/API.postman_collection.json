@@ -1,5 +1,6 @@
 {
-wan  "info": {
+  wan
+  "info": {
     "_postman_id": "1c88bea3-4267-4ec7-a3b1-e55efda83afa",
     "name": "API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",

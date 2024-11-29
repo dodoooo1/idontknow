@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class SysDepartmentEntity {
+public class SysOrganizationEntity {
 
     private Long id;
 

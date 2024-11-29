@@ -1,4 +1,4 @@
-package com.idontknow.business.interfaces.internal.actuator;
+package com.idontknow.business.adapter.internal.actuator;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.actuate.endpoint.web.annotation.WebEndpoint;

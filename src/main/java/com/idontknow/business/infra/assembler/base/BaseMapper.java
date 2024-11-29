@@ -24,8 +24,10 @@ public interface BaseMapper<E, D, C, U, R> {
 
     @ToPersist
     D toPersist(E entity);
+
     @ToEntity
     E PersistToEntity(D persist);
+
     @ToEntity
     E update(U request, @MappingTarget E entity);
 

@@ -1,6 +1,5 @@
 package com.idontknow.business.infra.gatewayimpl.dataobject.system;
 
-import com.idontknow.business.domain.entities.system.SysRole;
 import com.idontknow.business.infra.gatewayimpl.dataobject.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +23,10 @@ public class SysUserDO extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organization_id", nullable = false)
+    private SysOrganizationDO organization;
 
     @Column(nullable = false, length = 64)
     private String username;

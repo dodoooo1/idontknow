@@ -23,6 +23,8 @@ public class SysLogDO extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "organization_id", nullable = false)
+    private Long organizationId;
     @Column(name = "module_name", nullable = false)
     private String moduleName;
 

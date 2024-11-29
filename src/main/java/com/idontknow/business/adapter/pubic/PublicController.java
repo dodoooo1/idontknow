@@ -1,4 +1,4 @@
-package com.idontknow.business.interfaces.pubic;
+package com.idontknow.business.adapter.pubic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -67,7 +67,7 @@ public class PublicController {
        /* System.out.println(new ObjectMapper().writeValueAsString(createSysUserRequest));
         SysUserEntity entity = mapper.toEntity(createSysUserRequest);*/
             System.out.println(new ObjectMapper().writeValueAsString(entity));
-          //  authenticationService.signup(entity);
+            //  authenticationService.signup(entity);
 
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

@@ -2,7 +2,6 @@ package com.idontknow.business.infra.gatewayimpl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.idontknow.business.application.services.system.dto.SysUserResponse;
 import com.idontknow.business.domain.entities.system.SysUser;
 import com.idontknow.business.domain.gateway.SysUserGateway;
 import com.idontknow.business.infra.assembler.SysUserMapper;
@@ -18,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @description:
@@ -34,6 +34,7 @@ public class SysUserGatewayImpl extends BaseGateway<SysUserDO> implements SysUse
     private final SysUserRepository repository;
     private final JPAQueryFactory jpaQueryFactory;
     private final SysUserMapper mapper;
+
     @Override
     public boolean isUsernameTaken(String username) {
         return false;
@@ -70,10 +71,10 @@ public class SysUserGatewayImpl extends BaseGateway<SysUserDO> implements SysUse
     }
 
     @Override
-    public SysUserDO loadUserByUsername(String username) {
+    public Optional<SysUserDO> loadUserByUsername(String username) {
         QSysUserDO qUser = QSysUserDO.sysUserDO;
         BooleanExpression predicate = qUser.username.eq(username);
-        return repository.findOne(predicate).get();
+        return repository.findOne(predicate);
     }
 
 }

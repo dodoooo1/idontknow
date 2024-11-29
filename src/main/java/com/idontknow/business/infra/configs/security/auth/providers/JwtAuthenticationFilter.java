@@ -1,48 +1,69 @@
 package com.idontknow.business.infra.configs.security.auth.providers;
 
+import com.google.common.base.Strings;
+import com.idontknow.business.constants.AppUrls;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AndRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
+import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
-public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    private final UserDetailsService userDetailsService;
-    private final JwtTokenService jwtTokenService;
 
-    public JwtAuthenticationFilter(UserDetailsService userDetailsService, JwtTokenService jwtTokenService) {
-        this.userDetailsService = userDetailsService;
-        this.jwtTokenService = jwtTokenService;
+@Slf4j
+public class JwtAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+    public static final String HEADER_STRING = "Authorization";
+    public static final String TOKEN_PREFIX = "Bearer ";
+
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
+        super(new AndRequestMatcher(
+                new AntPathRequestMatcher("/**"),
+                new NegatedRequestMatcher(new OrRequestMatcher(
+                        new AntPathRequestMatcher(AppUrls.PUBLIC + "/**"),
+                        new AntPathRequestMatcher("/auth/**"),
+                        new AntPathRequestMatcher("/v3/api-docs/**"),
+                        new AntPathRequestMatcher("/swagger-ui/**"),
+                        new AntPathRequestMatcher("/swagger-ui.html")
+                ))
+        )); // Match all requests initially
+        setAuthenticationManager(authenticationManager);
     }
 
-    private static final String TOKEN_PREFIX = "Bearer ";
-    private static final String HEADER_STRING = "Authorization";
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) {
+        String header = request.getHeader(HEADER_STRING);
+
+        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+            return this.getAuthenticationManager().authenticate(new JwtAuthenticationToken());
+        }
+        String token = header.replace(TOKEN_PREFIX, "");
+        final Optional<String> tokenOptional =
+                StringUtils.hasLength(token) ? Optional.of(token) : Optional.empty();
+        final JwtAuthenticationToken authenticationToken =
+                tokenOptional.map(JwtAuthenticationToken::new).orElse(new JwtAuthenticationToken());
+
+        return this.getAuthenticationManager().authenticate(authenticationToken);
+
+    }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        String header = req.getHeader(HEADER_STRING);
-        String username = null;
-        if (header != null && header.startsWith(TOKEN_PREFIX)) {
-            String authToken = header.replace(TOKEN_PREFIX, "");
-          //  username = jwtTokenService.extractUsernameFromToken(authToken);
-        } else {
-            logger.warn("couldn't find bearer string, will ignore the header");
-        }
-        if (StringUtils.hasText(username)) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-            logger.info("authenticated user " + username + ", setting security context");
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
-        chain.doFilter(req, res);
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
+                                            Authentication authResult) throws IOException, ServletException {
+        SecurityContextHolder.getContext().setAuthentication(authResult);
+        chain.doFilter(request, response);
     }
 }

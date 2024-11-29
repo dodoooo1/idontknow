@@ -23,7 +23,7 @@ management:
 
 spring:
   cache:
-    type: caffeine
+    type: redis
   jpa:
     properties:
       hibernate:
@@ -41,3 +41,11 @@ logging:
     # hibernate.SQL: DEBUG
     # hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
     # reactor.netty.http.client.HttpClient: DEBUG
+# application.yml
+jwt:
+  access:
+    token:
+      validity:
+        seconds: 28800 #八小时
+  issuer:
+    url: http://localhost:8082

@@ -17,4 +17,5 @@ public interface SysUserMapper
         CreateSysUserRequest,
         UpdateSysUserRequest,
         SysUserResponse> {
+
 }

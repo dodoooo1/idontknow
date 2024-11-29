@@ -1,25 +1,27 @@
 package com.idontknow.business.application.services.system;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.idontknow.business.application.services.system.dto.CreateSysUserRequest;
-import com.idontknow.business.application.services.system.dto.SysUserQuery;
-import com.idontknow.business.application.services.system.dto.SysUserResponse;
-import com.idontknow.business.application.services.system.dto.UpdateSysUserRequest;
+import com.idontknow.business.application.services.system.dto.LoginRequest;
 
 /**
- * @description:
- * @title: AuthenticationService
- * @package com.idontknow.business.application.services.system
- * @author: glory
- * @date: 2024/10/25 09:48
+ * Interface for authenticating users and signing up new system users.
  */
 public interface AuthenticationService {
-    SysUserResponse findByUsername(String username);
+    /**
+     * Authenticates a user with the provided login request.
+     *
+     * @param loginRequest the login request containing the user's credentials
+     * @return a string representing the authentication token
+     * @throws JsonProcessingException if an error occurs during JSON processing
+     */
+    String authenticate(LoginRequest loginRequest) throws JsonProcessingException;
 
-    SysUserResponse getCurrentUser();
-
-    String authenticate(SysUserQuery loginDto);
-
+    /**
+     * Sign up a new system user with the provided request.
+     *
+     * @param createSysUserRequest the request containing the information of the user to sign up
+     */
     void signup(CreateSysUserRequest createSysUserRequest);
 
-    void updatePassword(UpdateSysUserRequest updateSysUserRequest);
 }

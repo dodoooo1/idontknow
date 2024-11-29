@@ -23,6 +23,8 @@ public class SysResourceDO extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "organization_id", nullable = false)
+    private Long organizationId;
     @Column(name = "parent_id", nullable = false)
     private Long parentId;
 
@@ -77,7 +79,6 @@ public class SysResourceDO extends BaseEntity {
 
     @Column(name = "open_type")
     private String openType;
-
 
 
     // getters and setters

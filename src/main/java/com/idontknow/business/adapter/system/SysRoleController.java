@@ -1,4 +1,4 @@
-package com.idontknow.business.interfaces.system;
+package com.idontknow.business.adapter.system;
 
 import com.idontknow.business.application.services.system.SysRoleService;
 import com.idontknow.business.application.services.system.dto.CreateSysRoleRequest;
@@ -25,7 +25,7 @@ public class SysRoleController {
 
     @PutMapping("/{id}")
     public void update(@PathVariable String id, @RequestBody UpdateSysRoleRequest request) {
-       service.update(id,request);
+        service.update(id, request);
     }
 
     @DeleteMapping("/{id}")

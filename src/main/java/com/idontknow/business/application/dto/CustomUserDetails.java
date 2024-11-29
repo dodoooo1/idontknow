@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class AuthenticationUser implements UserDetails {
+public class CustomUserDetails implements UserDetails {
     private Long id;
     private String username;
     private String password;

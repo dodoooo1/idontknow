@@ -35,10 +35,12 @@ public class SysUser {
     public void updatePassword(String newPassword) {
         this.password = newPassword;
     }
-    public void updateStatus( String status) {
+
+    public void updateStatus(String status) {
         this.status = status;
 
     }
+
     public void addRole(SysRole role) {
         if (!roles.contains(role)) {
             roles.add(role);

@@ -1,25 +1,17 @@
 package com.idontknow.business.application.services.system.impl;
 
-import com.idontknow.business.application.dto.AuthenticationUser;
+import com.idontknow.business.application.dto.CustomUserDetails;
 import com.idontknow.business.application.services.BaseService;
 import com.idontknow.business.application.services.system.AuthenticationService;
+import com.idontknow.business.application.services.system.SysUserService;
 import com.idontknow.business.application.services.system.dto.CreateSysUserRequest;
-import com.idontknow.business.application.services.system.dto.SysUserQuery;
-import com.idontknow.business.application.services.system.dto.SysUserResponse;
-import com.idontknow.business.application.services.system.dto.UpdateSysUserRequest;
-import com.idontknow.business.domain.ability.SysUserDomainService;
+import com.idontknow.business.application.services.system.dto.LoginRequest;
 import com.idontknow.business.domain.entities.system.SysUser;
-import com.idontknow.business.domain.gateway.SysUserGateway;
-import com.idontknow.business.infra.assembler.SysUserMapper;
-import com.idontknow.business.infra.configs.security.auth.providers.JwtTokenService;
-import com.idontknow.business.infra.gatewayimpl.dataobject.system.SysUserDO;
+import com.idontknow.business.infra.configs.security.auth.providers.JwtTokenProvider;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 /**
@@ -33,50 +25,31 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl extends BaseService<SysUser> implements AuthenticationService {
-    private final JwtTokenService jwtTokenService;
-    private final AuthenticationProvider authenticationProvider;
-    private final SysUserMapper mapper ;
-    private final BCryptPasswordEncoder passwordEncoder;
-    private final SysUserDomainService sysUserDomainService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final UserDetailsService userDetailsService;
+    private final SysUserService sysUserService;
 
-
-    public String authenticate(SysUserQuery loginRequest) {
-        final Authentication authentication = authenticationProvider.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.username(),
-                        loginRequest.password()
-                )
-        );
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        AuthenticationUser userDetails = (AuthenticationUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return jwtTokenService.generateToken(userDetails);
+    /**
+     * Authenticates a user with the provided login request.
+     *
+     * @param loginRequest the login request containing the user's credentials
+     * @return a string representing the authentication token
+     */
+    public String authenticate(@Valid LoginRequest loginRequest) {
+        CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(loginRequest.username());
+        if (!sysUserService.matchesPassword(loginRequest.password(), userDetails.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+        return jwtTokenProvider.generateToken(userDetails);
     }
 
+    /**
+     * Signs up a new system user with the provided request.
+     *
+     * @param createSysUserRequest the request containing the information of the user to sign up
+     */
     @Override
     public void signup(CreateSysUserRequest createSysUserRequest) {
-        SysUser entity = mapper.toEntity(createSysUserRequest);
-        entity.setPassword(passwordEncoder.encode(entity.getPassword()));
-        sysUserDomainService.create(entity);
+        sysUserService.create(createSysUserRequest);
     }
-
-    @Override
-    public void updatePassword(UpdateSysUserRequest updateSysUserRequest) {
-        SysUserDO byId = sysUserDomainService.findById(updateSysUserRequest.id());
-        SysUser sysUser = mapper.PersistToEntity(byId);
-        String password = passwordEncoder.encode(updateSysUserRequest.password());
-        String newPassword = passwordEncoder.encode(updateSysUserRequest.newPassword());
-        sysUserDomainService.updatePassword(sysUser,newPassword);
-    }
-
-
-    @Override
-    public SysUserResponse findByUsername(String username) {
-        return mapper.PersistToResponse(sysUserDomainService.loadUserByUsername(username));
-    }
-
-    public SysUserResponse getCurrentUser() {
-        AuthenticationUser userDetails = (AuthenticationUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return findByUsername(userDetails.getUsername());
-    }
-
 }

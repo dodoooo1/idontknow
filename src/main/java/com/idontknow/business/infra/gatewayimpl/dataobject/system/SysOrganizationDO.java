@@ -9,6 +9,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.Set;
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Getter
@@ -16,13 +18,15 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@Table(name = SysDepartmentDO.TABLE_NAME)
-public class SysDepartmentDO extends BaseEntity {
-    public static final String TABLE_NAME = "sys_department";
+@Table(name = SysOrganizationDO.TABLE_NAME)
+public class SysOrganizationDO extends BaseEntity {
+    public static final String TABLE_NAME = "sys_organization";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "organization_id", nullable = false)
+    private Long organizationId;
     @Column(name = "parent_id", nullable = false)
     private Long parentId;
 
@@ -54,9 +58,10 @@ public class SysDepartmentDO extends BaseEntity {
     private String remarks;
 
 
-
     @Column(name = "iz_leaf")
     private Boolean izLeaf;
+    @OneToMany(mappedBy = "organization", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<SysUserDO> users;
 
     // getters and setters
 }

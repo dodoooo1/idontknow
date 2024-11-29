@@ -1,4 +1,4 @@
-package com.idontknow.business.interfaces.internal;
+package com.idontknow.business.adapter.internal;
 
 import com.idontknow.business.application.services.LocalCacheManagerService;
 import com.idontknow.business.constants.AppUrls;

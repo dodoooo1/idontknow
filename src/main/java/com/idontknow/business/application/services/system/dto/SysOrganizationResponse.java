@@ -1,6 +1,6 @@
 package com.idontknow.business.application.services.system.dto;
 
-public class UpdateSysDepartmentRequest {
+public class SysOrganizationResponse {
 
     private Long id;
     private String name;
@@ -8,8 +8,6 @@ public class UpdateSysDepartmentRequest {
     private String type;
     private String level;
     private String code;
-    private String mobile;
-    private String address;
     private String status;
 
     // getters and setters

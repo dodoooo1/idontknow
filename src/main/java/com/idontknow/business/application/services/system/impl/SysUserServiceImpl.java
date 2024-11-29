@@ -14,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 /**
  * @description:
  * @title: UserService
@@ -24,13 +26,15 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(rollbackFor = Exception.class)
 public class SysUserServiceImpl extends BaseService<SysUser> implements SysUserService {
     private final SysUserMapper mapper;
-    private SysUserDomainService sysUserDomainService;
+    private final SysUserDomainService sysUserDomainService;
+
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
     public void create(CreateSysUserRequest createSysUserRequest) {
+        Set<String> roleIds = createSysUserRequest.roleIds();
         sysUserDomainService.create(mapper.toEntity(createSysUserRequest));
     }
 
@@ -41,16 +45,40 @@ public class SysUserServiceImpl extends BaseService<SysUser> implements SysUserS
     }
 
     @Override
-    public void updateStatus(String id,UpdateSysUserRequest updateSysUserRequest) {
-        SysUserDO byId = sysUserDomainService.findById(id);
-        SysUser sysUser = mapper.PersistToEntity(byId);
-        sysUserDomainService.updateStatus(sysUser,updateSysUserRequest.status());
+    public void updateStatus(UpdateSysUserRequest updateSysUserRequest) {
+        sysUserDomainService.updateStatus(updateSysUserRequest);
     }
 
     @Override
-    public SysUserResponse loadUserByUsername(String username) {
-        return mapper.PersistToResponse(sysUserDomainService.loadUserByUsername(username));
+    public SysUser loadUserByUsername(String username) {
+        SysUserDO sysUserDO = sysUserDomainService.loadUserByUsername(username).orElseThrow(() -> new RuntimeException("User not found"));
+        return mapper.PersistToEntity(sysUserDO);
 
     }
+
+    @Override
+    public void update(UpdateSysUserRequest updateSysUserRequest) {
+
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(String id) {
+        Long longId = Long.valueOf(id);
+        sysUserDomainService.delete(new Long[]{longId});
+        //删除用户关联的角色
+        sysUserDomainService.deleteUserRoleAssociation(longId);
+    }
+
+    @Override
+    public boolean matchesPassword(String loginPassword, String password) {
+        return sysUserDomainService.matchesPassword(loginPassword, password);
+    }
+
+    @Override
+    public void updatePassword(UpdateSysUserRequest updateSysUserRequest) {
+        sysUserDomainService.updatePassword(updateSysUserRequest);
+    }
+
 
 }
