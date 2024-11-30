@@ -16,8 +16,8 @@ public class DistributedLockService {
     /**
      * 加锁方法
      *
-     * @param lockName 锁名称
-     * @param waitTime 等待时间（单位：秒）
+     * @param lockName  锁名称
+     * @param waitTime  等待时间（单位：秒）
      * @param leaseTime 租赁时间（单位：秒）
      * @return 是否成功获取锁
      */
@@ -56,10 +56,10 @@ public class DistributedLockService {
     /**
      * 自动释放锁的方法
      *
-     * @param lockName 锁名称
-     * @param waitTime 等待时间（单位：秒）
+     * @param lockName  锁名称
+     * @param waitTime  等待时间（单位：秒）
      * @param leaseTime 租赁时间（单位：秒）
-     * @param task 要执行的任务
+     * @param task      要执行的任务
      * @throws InterruptedException 如果线程中断
      */
     public void executeWithLock(String lockName, long waitTime, long leaseTime, Runnable task) throws InterruptedException {

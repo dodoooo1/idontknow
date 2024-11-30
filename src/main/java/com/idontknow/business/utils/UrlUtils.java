@@ -1,6 +1,6 @@
 package com.idontknow.business.utils;
 
-import com.idontknow.business.infra.gatewayimpl.dataobject.base.BaseEntity;
+import com.idontknow.business.domain.entities.base.BaseEntity;
 import lombok.experimental.UtilityClass;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

@@ -1,12 +1,12 @@
 package com.idontknow.business.application.services.system.impl;
 
 import com.idontknow.business.application.dto.CustomUserDetails;
-import com.idontknow.business.application.services.BaseService;
 import com.idontknow.business.application.services.system.AuthenticationService;
-import com.idontknow.business.application.services.system.SysUserService;
-import com.idontknow.business.application.services.system.dto.CreateSysUserRequest;
+import com.idontknow.business.application.services.system.UserEntityService;
+import com.idontknow.business.application.services.system.dto.CreateUserEntityRequest;
 import com.idontknow.business.application.services.system.dto.LoginRequest;
-import com.idontknow.business.domain.entities.system.SysUser;
+import com.idontknow.business.domain.entities.system.UserEntity;
+import com.idontknow.business.infra.assembler.UserEntityMapper;
 import com.idontknow.business.infra.configs.security.auth.providers.JwtTokenProvider;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +24,11 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AuthenticationServiceImpl extends BaseService<SysUser> implements AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
-    private final SysUserService sysUserService;
+    private final UserEntityService userEntityService;
+    private final UserEntityMapper mapper;
 
     /**
      * Authenticates a user with the provided login request.
@@ -37,7 +38,7 @@ public class AuthenticationServiceImpl extends BaseService<SysUser> implements A
      */
     public String authenticate(@Valid LoginRequest loginRequest) {
         CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(loginRequest.username());
-        if (!sysUserService.matchesPassword(loginRequest.password(), userDetails.getPassword())) {
+        if (!userEntityService.matchesPassword(loginRequest.password(), userDetails.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
         return jwtTokenProvider.generateToken(userDetails);
@@ -46,10 +47,11 @@ public class AuthenticationServiceImpl extends BaseService<SysUser> implements A
     /**
      * Signs up a new system user with the provided request.
      *
-     * @param createSysUserRequest the request containing the information of the user to sign up
+     * @param createUserEntityRequest the request containing the information of the user to sign up
      */
     @Override
-    public void signup(CreateSysUserRequest createSysUserRequest) {
-        sysUserService.create(createSysUserRequest);
+    public void signup(CreateUserEntityRequest createUserEntityRequest) {
+        UserEntity entity = mapper.toEntity(createUserEntityRequest);
+        userEntityService.create(entity);
     }
 }

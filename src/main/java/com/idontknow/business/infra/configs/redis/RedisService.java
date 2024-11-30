@@ -1,7 +1,8 @@
 package com.idontknow.business.infra.configs.redis;
 
-import org.redisson.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.redisson.api.RBucket;
+import org.redisson.api.RMapCache;
+import org.redisson.api.RedissonClient;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;

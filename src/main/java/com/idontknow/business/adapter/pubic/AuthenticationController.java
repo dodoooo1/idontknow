@@ -3,7 +3,7 @@ package com.idontknow.business.adapter.pubic;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.idontknow.business.application.services.system.AuthenticationService;
-import com.idontknow.business.application.services.system.dto.CreateSysUserRequest;
+import com.idontknow.business.application.services.system.dto.CreateUserEntityRequest;
 import com.idontknow.business.application.services.system.dto.LoginRequest;
 import com.idontknow.business.application.services.system.dto.SysUserResponse;
 import lombok.Getter;
@@ -25,8 +25,8 @@ public class AuthenticationController {
     private final ObjectMapper objectMapper;
 
     @PostMapping("/signup")
-    public ResponseEntity<SysUserResponse> register(@RequestBody CreateSysUserRequest createSysUserRequest) {
-        authenticationService.signup(createSysUserRequest);
+    public ResponseEntity<SysUserResponse> register(@RequestBody CreateUserEntityRequest createUserEntityRequest) {
+        authenticationService.signup(createUserEntityRequest);
         return ResponseEntity.ok().build();
     }
 

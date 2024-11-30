@@ -1,7 +1,7 @@
 package com.idontknow.business.application.services.system;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.idontknow.business.application.services.system.dto.CreateSysUserRequest;
+import com.idontknow.business.application.services.system.dto.CreateUserEntityRequest;
 import com.idontknow.business.application.services.system.dto.LoginRequest;
 
 /**
@@ -20,8 +20,8 @@ public interface AuthenticationService {
     /**
      * Sign up a new system user with the provided request.
      *
-     * @param createSysUserRequest the request containing the information of the user to sign up
+     * @param createUserEntityRequest the request containing the information of the user to sign up
      */
-    void signup(CreateSysUserRequest createSysUserRequest);
+    void signup(CreateUserEntityRequest createUserEntityRequest);
 
 }

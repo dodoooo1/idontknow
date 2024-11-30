@@ -1,10 +1,10 @@
 package com.idontknow.business.infra.configs.security.auth.providers;
 
 import com.idontknow.business.application.dto.CustomUserDetails;
-import com.idontknow.business.infra.gatewayimpl.dataobject.system.QSysUserDO;
-import com.idontknow.business.infra.gatewayimpl.dataobject.system.SysRoleDO;
-import com.idontknow.business.infra.gatewayimpl.dataobject.system.SysUserDO;
-import com.idontknow.business.infra.gatewayimpl.repositories.SysUserRepository;
+import com.idontknow.business.domain.entities.system.QUserEntity;
+import com.idontknow.business.domain.entities.system.RoleEntity;
+import com.idontknow.business.domain.entities.system.UserEntity;
+import com.idontknow.business.infra.gatewayimpl.repositories.UserEntityRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,19 +25,19 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final SysUserRepository sysUserRepository;
+    private final UserEntityRepository userEntityRepository;
 
     @Override
     @Cacheable(value = "userDetails", key = "#username")
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        QSysUserDO qUser = QSysUserDO.sysUserDO;
+        QUserEntity qUser = QUserEntity.userEntity;
         BooleanExpression expression = qUser.username.eq(username).or(qUser.email.eq(username));
-        SysUserDO user = sysUserRepository.findOne(expression).orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity user = userEntityRepository.findOne(expression).orElseThrow(() -> new RuntimeException("User not found"));
         return CustomUserDetails.builder().email(user.getEmail()).name(user.getName()).id(user.getId()).password(user.getPassword()).username(user.getUsername()).simpleGrantedAuthority(getAuthority(user.getRoles())).build();
 
     }
 
-    private List<SimpleGrantedAuthority> getAuthority(Set<SysRoleDO> roles) {
+    private List<SimpleGrantedAuthority> getAuthority(Set<RoleEntity> roles) {
         return roles.stream().map(role -> new SimpleGrantedAuthority(role.getCode())).toList();
     }
 }

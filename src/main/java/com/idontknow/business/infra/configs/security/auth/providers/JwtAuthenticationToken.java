@@ -1,6 +1,6 @@
 package com.idontknow.business.infra.configs.security.auth.providers;
 
-import com.idontknow.business.domain.entities.system.SysRole;
+import com.idontknow.business.domain.entities.system.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -76,6 +76,6 @@ public class JwtAuthenticationToken extends AbstractAuthenticationToken {
         private LocalDateTime createdAt;
         private LocalDateTime updatedAt;
         private String status;
-        private Set<SysRole> roles = new HashSet<>();
+        private Set<RoleEntity> roles = new HashSet<>();
     }
 }

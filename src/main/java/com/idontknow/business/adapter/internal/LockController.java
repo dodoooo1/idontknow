@@ -18,8 +18,8 @@ public class LockController {
 
     @GetMapping("/lock")
     public String acquireLock(@RequestParam String lockName,
-                             @RequestParam(required = false, defaultValue = "10") long waitTime,
-                             @RequestParam(required = false, defaultValue = "30") long leaseTime) {
+                              @RequestParam(required = false, defaultValue = "10") long waitTime,
+                              @RequestParam(required = false, defaultValue = "30") long leaseTime) {
         boolean locked = distributedLockService.tryLock(lockName, waitTime, leaseTime);
         if (locked) {
             logger.info("Lock acquired successfully for {}", lockName);

@@ -23,6 +23,6 @@ public record SysUserResponse(
         LocalDateTime createdAt,
         LocalDateTime updatedAt,
         String status,
-        Set<SysRoleResponse> roles
+        Set<RoleEntityResponse> roles
 ) {
 }

@@ -1,9 +1,7 @@
 package com.idontknow.business.facades;
 
-import com.idontknow.business.application.dto.CustomUserDetails;
 import com.idontknow.business.exceptions.InternalServerErrorException;
 import com.idontknow.business.infra.configs.security.auth.providers.JwtAuthenticationToken;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.Authentication;

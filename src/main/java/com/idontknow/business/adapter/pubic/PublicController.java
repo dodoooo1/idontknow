@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.idontknow.business.application.services.WebhookSiteService;
 import com.idontknow.business.application.services.system.dto.SysUserResponse;
 import com.idontknow.business.constants.AppUrls;
-import com.idontknow.business.domain.entities.system.SysUser;
+import com.idontknow.business.domain.entities.system.UserEntity;
 import com.idontknow.business.infra.event.publishers.EventPublisher;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -62,7 +62,7 @@ public class PublicController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<SysUserResponse> register(@Valid @RequestBody SysUser entity) {
+    public ResponseEntity<SysUserResponse> register(@Valid @RequestBody UserEntity entity) {
         try {
        /* System.out.println(new ObjectMapper().writeValueAsString(createSysUserRequest));
         SysUserEntity entity = mapper.toEntity(createSysUserRequest);*/
