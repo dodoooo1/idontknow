@@ -14,6 +14,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.idontknow.business.constants.DateConstants;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.context.annotation.Bean;
 
@@ -43,14 +44,14 @@ public class GlobalConfig {
         // Customize LocalDateTime format
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addDeserializer(LocalDateTime.class,
-                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern(DateConstants.DATE_TIME_FORMAT)));
         javaTimeModule.addSerializer(LocalDateTime.class,
-                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                new LocalDateTimeSerializer(DateTimeFormatter.ofPattern(DateConstants.DATE_TIME_FORMAT)));
 
         javaTimeModule.addDeserializer(LocalDate.class,
-                new LocalDateDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                new LocalDateDeserializer(DateTimeFormatter.ofPattern(DateConstants.DATE_FORMAT)));
         javaTimeModule.addSerializer(LocalDate.class,
-                new LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                new LocalDateSerializer(DateTimeFormatter.ofPattern(DateConstants.DATE_FORMAT)));
         objectMapper.registerModule(javaTimeModule);
 
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);

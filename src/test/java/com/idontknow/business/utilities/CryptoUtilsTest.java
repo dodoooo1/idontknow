@@ -1,4 +1,4 @@
-package com.idontknow.business.utils;
+package com.idontknow.business.utilities;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

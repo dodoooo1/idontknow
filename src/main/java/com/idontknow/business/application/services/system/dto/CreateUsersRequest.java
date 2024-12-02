@@ -11,7 +11,7 @@ import java.util.Set;
  * @author: glory
  * @date: 2024/10/24 10:13
  */
-public record CreateUserEntityRequest(
+public record CreateUsersRequest(
         @NotBlank(message = "Username cannot be empty!")
         String username,
         @NotBlank(message = "Password cannot be empty!")

@@ -6,7 +6,7 @@ import com.idontknow.business.domain.entities.system.QUserEntity;
 import com.idontknow.business.domain.entities.system.UserEntity;
 import com.idontknow.business.domain.gateway.UserEntityGateway;
 import com.idontknow.business.infra.assembler.UserEntityMapper;
-import com.idontknow.business.infra.gatewayimpl.repositories.UserEntityRepository;
+import com.idontknow.business.infra.gatewayimpl.repositories.UsersRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.Getter;
@@ -29,7 +29,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserEntityGatewayImpl implements UserEntityGateway {
-    private final UserEntityRepository repository;
+    private final UsersRepository repository;
     private final JPAQueryFactory jpaQueryFactory;
     private final UserEntityMapper mapper;
 

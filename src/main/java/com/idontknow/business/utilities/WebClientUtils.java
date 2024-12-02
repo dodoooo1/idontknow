@@ -1,4 +1,4 @@
-package com.idontknow.business.utils;
+package com.idontknow.business.utilities;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.ssl.SslClosedEngineException;

@@ -9,5 +9,19 @@ import lombok.Getter;
 public enum StatusEnum {
     ACTIVE("ACTIVE"),
     INACTIVE("INACTIVE");
-    private final String name;
+
+    private final String value;
+
+    public String getValue() {
+        return value;
+    }
+
+    public static StatusEnum fromValue(String value) {
+        for (StatusEnum status : StatusEnum.values()) {
+            if (status.getValue().equals(value)) {
+                return status;
+            }
+        }
+        throw new IllegalArgumentException("Invalid status value: " + value);
+    }
 }

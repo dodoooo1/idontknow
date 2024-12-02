@@ -66,18 +66,6 @@ spring:
     username: root
     password: 12345678
 
-  jpa:
-    open-in-view: false # disables lazy loading in web views, important for performance.
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        generate_statistics: false
-        jdbc:
-          # important: When using GenerationType.IDENTITY Hibernate disable batching, you need to use BatchSequenceGenerator
-          batch_size: 10
-          time_zone: Asia/Shanghai
-
 rabbitmq:
   host: localhost
   port: 5672

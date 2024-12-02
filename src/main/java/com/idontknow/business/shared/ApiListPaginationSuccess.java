@@ -1,6 +1,6 @@
 package com.idontknow.business.shared;
 
-import com.idontknow.business.utils.UrlUtils;
+import com.idontknow.business.utilities.UrlUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -23,7 +23,7 @@ public record ApiListPaginationSuccess<T>(
 
         public PaginationMeta(final Page<T> page) {
             this(
-                    page.getNumber(),
+                    page.getNumber()+1,
                     page.getSize(),
                     page.getTotalPages(),
                     page.getTotalElements(),

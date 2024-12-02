@@ -1,4 +1,4 @@
-package com.idontknow.business.utils;
+package com.idontknow.business.utilities;
 
 
 import com.idontknow.business.domain.entities.base.BaseEntity;

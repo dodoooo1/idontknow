@@ -1,11 +1,10 @@
 package com.idontknow.business.adapter.pubic;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.idontknow.business.application.services.system.AuthenticationService;
-import com.idontknow.business.application.services.system.dto.CreateUserEntityRequest;
+import com.idontknow.business.application.services.system.dto.CreateUsersRequest;
 import com.idontknow.business.application.services.system.dto.LoginRequest;
-import com.idontknow.business.application.services.system.dto.SysUserResponse;
+import com.idontknow.business.application.services.system.dto.UserEntityResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
-    private final ObjectMapper objectMapper;
 
     @PostMapping("/signup")
-    public ResponseEntity<SysUserResponse> register(@RequestBody CreateUserEntityRequest createUserEntityRequest) {
-        authenticationService.signup(createUserEntityRequest);
+    public ResponseEntity<UserEntityResponse> register(@RequestBody CreateUsersRequest createUsersRequest) {
+        authenticationService.signup(createUsersRequest);
         return ResponseEntity.ok().build();
     }
 

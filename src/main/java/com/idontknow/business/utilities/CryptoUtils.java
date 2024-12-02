@@ -1,4 +1,4 @@
-package com.idontknow.business.utils;
+package com.idontknow.business.utilities;
 
 import lombok.experimental.UtilityClass;
 

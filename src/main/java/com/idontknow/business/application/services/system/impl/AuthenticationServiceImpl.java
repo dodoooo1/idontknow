@@ -2,8 +2,8 @@ package com.idontknow.business.application.services.system.impl;
 
 import com.idontknow.business.application.dto.CustomUserDetails;
 import com.idontknow.business.application.services.system.AuthenticationService;
-import com.idontknow.business.application.services.system.UserEntityService;
-import com.idontknow.business.application.services.system.dto.CreateUserEntityRequest;
+import com.idontknow.business.application.services.system.UsersService;
+import com.idontknow.business.application.services.system.dto.CreateUsersRequest;
 import com.idontknow.business.application.services.system.dto.LoginRequest;
 import com.idontknow.business.domain.entities.system.UserEntity;
 import com.idontknow.business.infra.assembler.UserEntityMapper;
@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
-    private final UserEntityService userEntityService;
+    private final UsersService usersService;
     private final UserEntityMapper mapper;
 
     /**
@@ -38,7 +38,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
      */
     public String authenticate(@Valid LoginRequest loginRequest) {
         CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(loginRequest.username());
-        if (!userEntityService.matchesPassword(loginRequest.password(), userDetails.getPassword())) {
+        if (!usersService.matchesPassword(loginRequest.password(), userDetails.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
         return jwtTokenProvider.generateToken(userDetails);
@@ -47,11 +47,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     /**
      * Signs up a new system user with the provided request.
      *
-     * @param createUserEntityRequest the request containing the information of the user to sign up
+     * @param createUsersRequest the request containing the information of the user to sign up
      */
     @Override
-    public void signup(CreateUserEntityRequest createUserEntityRequest) {
-        UserEntity entity = mapper.toEntity(createUserEntityRequest);
-        userEntityService.create(entity);
+    public void signup(CreateUsersRequest createUsersRequest) {
+        UserEntity entity = mapper.toEntity(createUsersRequest);
+        usersService.create(entity);
     }
 }

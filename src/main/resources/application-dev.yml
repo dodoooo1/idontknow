@@ -25,10 +25,19 @@ spring:
   cache:
     type: redis
   jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false # disables lazy loading in web views, important for performance.
     properties:
       hibernate:
-        show_sql: false
-        format_sql: false
+        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        generate_statistics: true
+        jdbc:
+          # important: When using GenerationType.IDENTITY Hibernate disable batching, you need to use BatchSequenceGenerator
+          batch_size: 10
+          time_zone: Asia/Shanghai
   devtools:
     restart:
       enabled: false
@@ -37,10 +46,9 @@ logging:
   pattern.correlation: "[${spring.application.name:},%X{trace_id:-},%X{span_id:-},%X{trace_flags:-}]"
   level:
     web: info
-    # org.springframework.cache: TRACE
-    # hibernate.SQL: DEBUG
-    # hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
-    # reactor.netty.http.client.HttpClient: DEBUG
+    org.springframework.cache: TRACE
+    hibernate.SQL: DEBUG
+    hibernate.engine.jdbc.batch.internal.BatchingBatch: DEBUG
 # application.yml
 jwt:
   access:

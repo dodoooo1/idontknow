@@ -1,6 +1,6 @@
 package com.idontknow.business.clients.http;
 
-import com.idontknow.business.utils.WebClientUtils;
+import com.idontknow.business.utilities.WebClientUtils;
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig.SlidingWindowType;
@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 
 import static com.idontknow.business.clients.http.WebhookSiteUrlEnum.POST;
-import static com.idontknow.business.utils.WebClientUtils.getErrorMessage;
+import static com.idontknow.business.utilities.WebClientUtils.getErrorMessage;
 
 @Slf4j
 @Getter

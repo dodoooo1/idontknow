@@ -196,7 +196,7 @@ public class InboundOrderController {
 
 ```java
 
-// common/utils/DateUtils.java
+// common/utilities/DateUtils.java
 package com.example.wms.common.utils;
 
 import java.time.LocalDateTime;

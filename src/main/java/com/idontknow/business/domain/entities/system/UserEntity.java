@@ -1,6 +1,7 @@
 package com.idontknow.business.domain.entities.system;
 
 import com.idontknow.business.domain.entities.base.BaseEntity;
+import com.idontknow.business.enums.StatusEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -63,7 +64,7 @@ public class UserEntity extends BaseEntity {
 
     }
 
-    public void updateStatus(String status) {
+    public void updateStatus(StatusEnum status) {
         this.setStatus(status);
     }
 }

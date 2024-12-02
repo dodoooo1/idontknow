@@ -1,9 +1,9 @@
 package com.idontknow.business.infra.assembler;
 
 
-import com.idontknow.business.application.services.system.dto.CreateUserEntityRequest;
-import com.idontknow.business.application.services.system.dto.SysUserResponse;
-import com.idontknow.business.application.services.system.dto.UpdateUserEntityRequest;
+import com.idontknow.business.application.services.system.dto.CreateUsersRequest;
+import com.idontknow.business.application.services.system.dto.UpdateUsersRequest;
+import com.idontknow.business.application.services.system.dto.UserEntityResponse;
 import com.idontknow.business.domain.entities.system.UserEntity;
 import com.idontknow.business.infra.assembler.base.SystemBaseMapper;
 import org.mapstruct.Mapper;
@@ -12,13 +12,13 @@ import org.mapstruct.Mapper;
 public interface UserEntityMapper
         extends SystemBaseMapper<
         UserEntity,
-        CreateUserEntityRequest,
-        UpdateUserEntityRequest,
-        SysUserResponse> {
+        CreateUsersRequest,
+        UpdateUsersRequest,
+        UserEntityResponse> {
     @Override
-    UserEntity toEntity(CreateUserEntityRequest request);
+    UserEntity toEntity(CreateUsersRequest request);
 
     @Override
-    SysUserResponse toSystemResponse(UserEntity entity);
+    UserEntityResponse toSystemResponse(UserEntity entity);
 
 }

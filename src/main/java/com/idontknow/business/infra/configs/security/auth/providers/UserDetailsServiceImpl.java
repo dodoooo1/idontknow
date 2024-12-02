@@ -4,7 +4,7 @@ import com.idontknow.business.application.dto.CustomUserDetails;
 import com.idontknow.business.domain.entities.system.QUserEntity;
 import com.idontknow.business.domain.entities.system.RoleEntity;
 import com.idontknow.business.domain.entities.system.UserEntity;
-import com.idontknow.business.infra.gatewayimpl.repositories.UserEntityRepository;
+import com.idontknow.business.infra.gatewayimpl.repositories.UsersRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +25,14 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserDetailsServiceImpl implements UserDetailsService {
-    private final UserEntityRepository userEntityRepository;
+    private final UsersRepository usersRepository;
 
     @Override
     @Cacheable(value = "userDetails", key = "#username")
     public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         QUserEntity qUser = QUserEntity.userEntity;
         BooleanExpression expression = qUser.username.eq(username).or(qUser.email.eq(username));
-        UserEntity user = userEntityRepository.findOne(expression).orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity user = usersRepository.findOne(expression).orElseThrow(() -> new RuntimeException("User not found"));
         return CustomUserDetails.builder().email(user.getEmail()).name(user.getName()).id(user.getId()).password(user.getPassword()).username(user.getUsername()).simpleGrantedAuthority(getAuthority(user.getRoles())).build();
 
     }

@@ -7,7 +7,7 @@ import com.idontknow.business.enums.StatusEnum;
 import com.idontknow.business.infra.assembler.UserEntityMapper;
 import com.idontknow.business.infra.configs.security.auth.providers.JwtAuthenticationToken;
 import com.idontknow.business.infra.configs.security.auth.providers.SecurityUtils;
-import com.idontknow.business.infra.gatewayimpl.repositories.UserEntityRepository;
+import com.idontknow.business.infra.gatewayimpl.repositories.UsersRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class UserDomainService extends BaseService<UserEntity> {
 
     private final UserEntityGateway gateway;
     private final UserEntityMapper mapper;
-    private final UserEntityRepository repository;
+    private final UsersRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     public UserEntity create(UserEntity entity) {
@@ -36,7 +36,7 @@ public class UserDomainService extends BaseService<UserEntity> {
         JwtAuthenticationToken currentUser = SecurityUtils.getCurrentUser().get();
         entity.setCreatedBy(currentUser.getUserInfo().getUsername());
         entity.setUpdatedBy(currentUser.getUserInfo().getUsername());
-        entity.setStatus(StatusEnum.INACTIVE.getName());
+        entity.setStatus(StatusEnum.INACTIVE);
         return repository.save(entity);
     }
 
@@ -66,15 +66,15 @@ public class UserDomainService extends BaseService<UserEntity> {
         return repository.save(entity);
     }
 
-    public void deleteAllById(List<Long> ids) {
-        repository.deleteAllById(ids);
-    }
-
     public Optional<UserEntity> loadUserByUsername(String username) {
         return gateway.loadUserByUsername(username);
     }
 
     public boolean matchesPassword(String loginPassword, String password) {
         return passwordEncoder.matches(loginPassword, password);
+    }
+
+    public void bulkDeleteUsers(List<Long> userIds) {
+        repository.deleteAllById(userIds);
     }
 }

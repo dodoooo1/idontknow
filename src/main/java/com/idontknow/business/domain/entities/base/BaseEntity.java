@@ -1,8 +1,7 @@
 package com.idontknow.business.domain.entities.base;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.MappedSuperclass;
+import com.idontknow.business.enums.StatusEnum;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,9 +43,9 @@ public abstract class BaseEntity implements Serializable {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private String status;
+    private StatusEnum status;
 
     public abstract Long getId();
 }

@@ -6,6 +6,6 @@ import org.springframework.data.querydsl.ListQuerydslPredicateExecutor;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserEntityRepository extends JpaRepository<UserEntity, Long>, ListQuerydslPredicateExecutor<UserEntity> {
+public interface UsersRepository extends JpaRepository<UserEntity, Long>, ListQuerydslPredicateExecutor<UserEntity> {
 
 }

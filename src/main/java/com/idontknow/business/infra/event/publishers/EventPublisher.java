@@ -1,7 +1,7 @@
 package com.idontknow.business.infra.event.publishers;
 
 import com.idontknow.business.infra.configs.rabbitmq.RabbitConfig;
-import com.idontknow.business.utils.JsonUtils;
+import com.idontknow.business.utilities.CoreJsonUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.*;
@@ -28,7 +28,7 @@ public class EventPublisher {
 
         try {
 
-            final String msg = JsonUtils.serializeToCamelCase(payload);
+            final String msg = CoreJsonUtils.serialize(payload);
 
             final MessageProperties props =
                     MessagePropertiesBuilder.newInstance()

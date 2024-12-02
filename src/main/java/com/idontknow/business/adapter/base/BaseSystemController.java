@@ -80,7 +80,7 @@ public abstract class BaseSystemController<E extends BaseEntity, C, U, R> {
   }
 */
 
-    private String getName() {
+    public String getName() {
         final Class<E> entityModelClass =
                 (Class<E>)
                         ((ParameterizedType) this.getClass().getGenericSuperclass())
