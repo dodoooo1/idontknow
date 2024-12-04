@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.idontknow.business.domain.entities.system.QUserEntity;
 import com.idontknow.business.domain.entities.system.UserEntity;
 import com.idontknow.business.domain.gateway.UserEntityGateway;
-import com.idontknow.business.infra.assembler.UserEntityMapper;
+import com.idontknow.business.infra.assembler.UsersMapper;
 import com.idontknow.business.infra.gatewayimpl.repositories.UsersRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -31,7 +31,7 @@ import java.util.Optional;
 public class UserEntityGatewayImpl implements UserEntityGateway {
     private final UsersRepository repository;
     private final JPAQueryFactory jpaQueryFactory;
-    private final UserEntityMapper mapper;
+    private final UsersMapper mapper;
 
     @Override
     public boolean isUsernameTaken(String username) {

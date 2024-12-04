@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.idontknow.business.application.services.system.AuthenticationService;
 import com.idontknow.business.application.services.system.dto.CreateUsersRequest;
 import com.idontknow.business.application.services.system.dto.LoginRequest;
-import com.idontknow.business.application.services.system.dto.UserEntityResponse;
+import com.idontknow.business.application.services.system.dto.UsersResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserEntityResponse> register(@RequestBody CreateUsersRequest createUsersRequest) {
+    public ResponseEntity<UsersResponse> register(@RequestBody CreateUsersRequest createUsersRequest) {
         authenticationService.signup(createUsersRequest);
         return ResponseEntity.ok().build();
     }

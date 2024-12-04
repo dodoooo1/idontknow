@@ -23,7 +23,7 @@ public record ApiListPaginationSuccess<T>(
 
         public PaginationMeta(final Page<T> page) {
             this(
-                    page.getNumber()+1,
+                    page.getNumber() + 1,
                     page.getSize(),
                     page.getTotalPages(),
                     page.getTotalElements(),

@@ -3,7 +3,7 @@ package com.idontknow.business.adapter.pubic;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.idontknow.business.application.services.WebhookSiteService;
-import com.idontknow.business.application.services.system.dto.UserEntityResponse;
+import com.idontknow.business.application.services.system.dto.UsersResponse;
 import com.idontknow.business.constants.AppUrls;
 import com.idontknow.business.domain.entities.system.UserEntity;
 import com.idontknow.business.infra.event.publishers.EventPublisher;
@@ -62,7 +62,7 @@ public class PublicController {
 
 
     @PostMapping("/signup")
-    public ResponseEntity<UserEntityResponse> register(@Valid @RequestBody UserEntity entity) {
+    public ResponseEntity<UsersResponse> register(@Valid @RequestBody UserEntity entity) {
         try {
        /* System.out.println(new ObjectMapper().writeValueAsString(createSysUserRequest));
         SysUserEntity entity = mapper.toEntity(createSysUserRequest);*/

@@ -27,11 +27,12 @@ public record ApiListPaginationSimple<T>(PaginationMeta meta, Collection<T> data
         return new ApiListPaginationSimple<>(new PaginationMeta(page), page.getContent(), null);
     }
 
-    public record PaginationMeta(Integer currentPage, Integer pageSize, String sortedBy, Long totalElements, Integer totalPages) {
+    public record PaginationMeta(Integer currentPage, Integer pageSize, String sortedBy, Long totalElements,
+                                 Integer totalPages) {
 
         public PaginationMeta(final Page<?> page) {
             this(
-                    page.getNumber()+1,
+                    page.getNumber() + 1,
                     page.getSize(),
                     page.getSort().isSorted() ? page.getSort().toString() : StringUtils.EMPTY,
                     page.getTotalElements(),
@@ -40,5 +41,6 @@ public record ApiListPaginationSimple<T>(PaginationMeta meta, Collection<T> data
         }
     }
 
-    public record Error(String code, String message) {}
+    public record Error(String code, String message) {
+    }
 }

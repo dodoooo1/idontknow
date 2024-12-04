@@ -2,7 +2,7 @@ package com.idontknow.business.infra.gatewayimpl;
 
 import com.idontknow.business.domain.entities.system.RoleEntity;
 import com.idontknow.business.domain.gateway.RoleEntityGateway;
-import com.idontknow.business.infra.gatewayimpl.repositories.RoleEntityRepository;
+import com.idontknow.business.infra.gatewayimpl.repositories.RolesRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class RoleEntityGatewayImpl implements RoleEntityGateway {
-    private final RoleEntityRepository repository;
+    private final RolesRepository repository;
     private final JPAQueryFactory jpaQueryFactory;
     //private final SysRoleMapper mapper;
 /*

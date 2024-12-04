@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import lombok.Getter;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -17,12 +18,18 @@ import java.util.List;
 /**
  * This is a Helper class with commonly used utilities for the SDK.
  */
+@Getter
 public class CoreJsonUtils {
 
     /**
      * Deserialization of Json data.
+     * -- GETTER --
+     * Deserialization of Json data.
+     *
+     * @return {@link ObjectMapper}.
      */
-    private static ObjectMapper mapper = JsonMapper
+    @Getter
+    private static final ObjectMapper mapper = JsonMapper
             .builder().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,
                     false)
             .withConfigOverride(BigDecimal.class, mutableConfigOverride -> mutableConfigOverride
@@ -32,7 +39,7 @@ public class CoreJsonUtils {
     /**
      * Strict Deserialization of Json data.
      */
-    private static ObjectMapper strictMapper = JsonMapper.builder()
+    private static final ObjectMapper strictMapper = JsonMapper.builder()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
             .configure(DeserializationFeature.FAIL_ON_MISSING_CREATOR_PROPERTIES, true)
             .configure(MapperFeature.ALLOW_COERCION_OF_SCALARS, false)
@@ -40,27 +47,9 @@ public class CoreJsonUtils {
                     .setFormat(JsonFormat.Value.forShape(JsonFormat.Shape.STRING)))
             .build();
 
-    protected CoreJsonUtils() {
+    private CoreJsonUtils() {
     }
 
-
-    /**
-     * Deserialization of Json data.
-     *
-     * @return {@link ObjectMapper}.
-     */
-    public static ObjectMapper getMapper() {
-        return mapper;
-    }
-
-    /**
-     * Strict Deserialization of Json data.
-     *
-     * @return {@link ObjectMapper}.
-     */
-    public static ObjectMapper getStrictMapper() {
-        return strictMapper;
-    }
 
     /**
      * Json Serialization of a given object.
