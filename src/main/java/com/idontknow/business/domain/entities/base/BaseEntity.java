@@ -3,6 +3,7 @@ package com.idontknow.business.domain.entities.base;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,7 +54,9 @@ public abstract class BaseEntity implements Serializable {
 
     @Column(name = "deleted_by")
     private String deletedBy;
-
+    @Column(name = "version")
+    @Version
+    private int version;
 
     public abstract Long getId();
 }
