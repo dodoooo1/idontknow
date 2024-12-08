@@ -11,12 +11,17 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>com.mycompany.microservice</groupId>
+    <groupId>com.idontkown.business</groupId>
     <artifactId>api</artifactId>
     <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
     <name>api</name>
     <description>Demo API project for Spring Boot</description>
+    <modules>
+        <module>idontkown-system</module>
+        <module>idontkown-common</module>
+    </modules>
 
     <properties>
         <java.version>21</java.version>
