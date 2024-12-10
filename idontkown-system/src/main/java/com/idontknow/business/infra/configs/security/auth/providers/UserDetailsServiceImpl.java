@@ -1,6 +1,7 @@
 package com.idontknow.business.infra.configs.security.auth.providers;
 
 import com.idontknow.business.application.dto.CustomUserDetails;
+import com.idontknow.business.domain.entities.system.OrganizationEntity;
 import com.idontknow.business.domain.entities.system.QUserEntity;
 import com.idontknow.business.domain.entities.system.RoleEntity;
 import com.idontknow.business.domain.entities.system.UserEntity;
@@ -33,10 +34,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         QUserEntity qUser = QUserEntity.userEntity;
         BooleanExpression expression = qUser.username.eq(username).or(qUser.email.eq(username));
         UserEntity user = usersRepository.findOne(expression).orElseThrow(() -> new RuntimeException("User not found"));
+        Set<OrganizationEntity> organizations = user.getOrganizations();
         return CustomUserDetails.builder().email(user.getEmail())
                 .name(user.getName()).id(user.getId()).password(user.getPassword())
                 .username(user.getUsername()).roles(user.getRoles())
-                .organizations(user.getOrganizations())
+                .organizations(organizations)
                 .simpleGrantedAuthority(getAuthority(user.getRoles())).build();
 
     }

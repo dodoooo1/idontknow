@@ -89,4 +89,12 @@ public class DictionariesService extends BaseService<DictionaryEntity> {
 
         return builder;
     }
+
+    public DictionaryEntity create(DictionaryEntity entity) {
+        return domainService.create(entity);
+    }
+
+    public DictionaryEntity update(DictionaryEntity update) {
+        return domainService.update(update);
+    }
 }

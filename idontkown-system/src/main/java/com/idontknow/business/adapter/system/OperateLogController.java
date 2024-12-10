@@ -8,17 +8,19 @@ import com.idontknow.business.application.services.system.query.SearchUsersReque
 import com.idontknow.business.constants.AppUrls;
 import com.idontknow.business.domain.entities.system.OperateLogEntity;
 import com.idontknow.business.domain.entities.system.RoleEntity;
+import com.idontknow.business.domain.entities.system.UserEntity;
 import com.idontknow.business.infra.assembler.OperateLogMapper;
 import com.idontknow.business.infra.assembler.UsersMapper;
 import com.idontknow.business.shared.ApiListPaginationSimple;
 import com.idontknow.business.shared.ApiListPaginationSuccess;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -34,5 +36,4 @@ public class OperateLogController{
     public ApiListPaginationSuccess<OperateLogResponse> getOperateLog(@RequestBody SearchOperateLogRequest request) {
         return service.getOperateLog(request);
     }
-
 }

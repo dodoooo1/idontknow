@@ -1,6 +1,8 @@
 package com.idontknow.business.adapter.base;
 
 import com.idontknow.business.application.services.base.BaseService;
+import com.idontknow.business.application.services.system.dto.RolesResponse;
+import com.idontknow.business.application.services.system.query.SearchRolesRequest;
 import com.idontknow.business.domain.ability.base.BaseDomainService;
 import com.idontknow.business.domain.entities.base.BaseEntity;
 import com.idontknow.business.infra.assembler.base.SystemBaseMapper;
@@ -27,7 +29,6 @@ import java.lang.reflect.ParameterizedType;
 public abstract class   BaseSystemController<E extends BaseEntity, C, U, R> {
 
     public abstract SystemBaseMapper<E, C, U, R> getMapper();
-
     public abstract BaseService<E> getService();
 
 
@@ -36,51 +37,6 @@ public abstract class   BaseSystemController<E extends BaseEntity, C, U, R> {
     public ResponseEntity<R> findById(@PathVariable("id") final Long id) {
         log.debug("[request] retrieve {} with id {}", this.getName(), id);
         final E entity = this.getService().findById(id);
-        return ResponseEntity.ok(this.getMapper().toSystemResponse(entity));
-    }
-/*
-
-  @ResponseStatus(HttpStatus.OK)
-  @GetMapping
-  public ApiListPaginationSuccess<R> findAll(final S pageable) {
-    log.debug("[request] retrieve all {}", this.getName());
-    final Page<E> entities = this.getService().findAll(pageable);
-    final Page<R> response = entities.map(this.getMapper()::toSystemResponse);
-    return ApiListPaginationSuccess.of(response);
-  }
-*/
-
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping
-    public ResponseEntity<R> create(@Valid @RequestBody final C request) {
-        log.info("[request] create {}", request);
-        final E entity = this.getService().create(this.getMapper().toEntity(request));
-        return ResponseEntity.ok(this.getMapper().toSystemResponse(entity));
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/{id}")
-    public ResponseEntity<R> update(@PathVariable("id") final Long id, @Valid @RequestBody final U request) {
-        log.info("[request] update '{}' {}", id, request);
-
-        final E original = this.getService().findById(id);
-        final E merged = this.getMapper().update(request, original);
-        if (merged.getVersion()<original.getVersion()){
-            throw new RuntimeException("version mismatch!");
-        }
-        final E entity = this.getService().update(merged);
-
-        return ResponseEntity.ok(this.getMapper().toSystemResponse(entity));
-    }
-
-    @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/{id}")
-    public ResponseEntity<R> patch(@PathVariable("id") final Long id, @RequestBody final U request) {
-        log.info("[request] patch  '{}' {}", id, request);
-        final E original = this.getService().findById(id);
-        final E merged = this.getMapper().patch(request, original);
-        final E entity = this.getService().update(merged);
-
         return ResponseEntity.ok(this.getMapper().toSystemResponse(entity));
     }
 

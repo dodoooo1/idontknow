@@ -60,7 +60,7 @@ public class OrganizationEntity extends BaseEntity {
 
     @Column(name = "iz_leaf")
     private Boolean izLeaf;
-    @ManyToMany(mappedBy = "organizations")
+    @ManyToMany(mappedBy = "organizations", fetch = FetchType.LAZY)
     private Set<UserEntity> users;
 
     // getters and setters

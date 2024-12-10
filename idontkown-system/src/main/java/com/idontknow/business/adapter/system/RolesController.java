@@ -10,13 +10,15 @@ import com.idontknow.business.constants.AppUrls;
 import com.idontknow.business.domain.entities.system.RoleEntity;
 import com.idontknow.business.infra.assembler.RolesMapper;
 import com.idontknow.business.shared.ApiListPaginationSuccess;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.checkerframework.checker.units.qual.C;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -33,8 +35,35 @@ public class RolesController extends BaseSystemController<
     private final RolesMapper mapper;
 
     @GetMapping
-    public ApiListPaginationSuccess<RolesResponse> getRoles(@RequestBody SearchRolesRequest request) {
+    public ApiListPaginationSuccess<RolesResponse> getRoles(@RequestBody final SearchRolesRequest request) {
         return service.getRoles(request);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping
+    public ResponseEntity<RolesResponse> create(@Valid @RequestBody final CreateRolesRequest request) {
+        log.info("[request] create {}", request);
+        final RoleEntity entity = service.create(mapper.toEntity(request));
+        return ResponseEntity.ok(mapper.toSystemResponse(entity));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/{id}")
+    public ResponseEntity<RolesResponse> update(@PathVariable("id") final Long id, @Valid @RequestBody final UpdateRolesRequest request) {
+        log.info("[request] update '{}' {}", id, request);
+        final RoleEntity entity = service.findById(id);
+        Assert.notNull(entity, "Role not found");
+        //Assert.isTrue(request.version() == entity.getVersion(), "Version mismatch");
+        return ResponseEntity.ok(mapper.toSystemResponse(service.update(mapper.update(request,entity))));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}")
+    public ResponseEntity<RolesResponse> patch(@PathVariable("id") final Long id, @RequestBody final UpdateRolesRequest request) {
+        log.info("[request] patch  '{}' {}", id, request);
+        final RoleEntity entity = service.findById(id);
+        Assert.notNull(entity, "Role not found");
+        Assert.isTrue(request.version() != entity.getVersion(), "Version mismatch");
+        return ResponseEntity.ok(this.getMapper().toSystemResponse(service.update(mapper.update(request,entity))));
+    }
 }

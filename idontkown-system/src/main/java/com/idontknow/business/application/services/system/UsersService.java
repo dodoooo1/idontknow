@@ -112,4 +112,11 @@ public class UsersService extends BaseService<UserEntity> {
     }
 
 
+    public UserEntity create(UserEntity entity) {
+        return domainService.create(entity);
+    }
+
+    public UserEntity update(UserEntity update) {
+       return domainService.update(update);
+    }
 }

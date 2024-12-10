@@ -1,10 +1,14 @@
 package com.idontknow.business.application.services.base;
 
+import com.idontknow.business.application.services.system.dto.RolesResponse;
+import com.idontknow.business.application.services.system.query.SearchRolesRequest;
 import com.idontknow.business.domain.ability.base.BaseDomainService;
 import com.idontknow.business.domain.entities.base.BaseEntity;
+import com.idontknow.business.shared.ApiListPaginationSuccess;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @description:
@@ -24,14 +28,6 @@ public abstract class BaseService<E extends BaseEntity> {
 
     public E findById(Long id) {
         return this.getDomainService().findById(id);
-    }
-
-    public E create(E entity) {
-        return getDomainService().create(entity);
-    }
-
-    public E update(E merged) {
-        return getDomainService().update(merged);
     }
 
     public void delete(Long id) {

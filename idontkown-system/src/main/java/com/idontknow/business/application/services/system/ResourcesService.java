@@ -91,4 +91,12 @@ public class ResourcesService extends BaseService<ResourceEntity> {
         builder.and(qResource.deleted.eq(false));
         return builder;
     }
+
+    public ResourceEntity create(ResourceEntity entity) {
+        return domainService.create(entity);
+    }
+
+    public ResourceEntity update(ResourceEntity update) {
+        return domainService.update(update);
+    }
 }

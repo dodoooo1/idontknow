@@ -22,7 +22,7 @@ public record UpdateUsersRequest(
         /**
          * 版本号,更新时，版本号不能为空
          */
-        String version,
+        int version,
         @NotBlank(message = "id不能为空")
         String id,
         @NotBlank(message = "用户名不能为空")

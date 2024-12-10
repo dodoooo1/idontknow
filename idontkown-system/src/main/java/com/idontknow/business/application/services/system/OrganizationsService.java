@@ -93,4 +93,12 @@ public class OrganizationsService extends BaseService<OrganizationEntity> {
 
         return builder;
     }
+
+    public OrganizationEntity create(OrganizationEntity entity) {
+        return domainService.create(entity);
+    }
+
+    public OrganizationEntity update(OrganizationEntity update) {
+        return domainService.update(update);
+    }
 }

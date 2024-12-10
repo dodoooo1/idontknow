@@ -51,11 +51,6 @@ public abstract class BaseDomainService<E extends BaseEntity> {
         log.debug("[retrieving] all {}", this.getEntityName());
         return this.getRepository().findAll();
     }
-    @Transactional(readOnly = true)
-    public Page<E> findAll(final Pageable pageable) {
-        log.debug("[retrieving] all {}", this.getEntityName());
-        return this.getRepository().findAll(pageable);
-    }
 
     @Transactional
     public E create(final E entity) {

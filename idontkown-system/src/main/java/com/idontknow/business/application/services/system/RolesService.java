@@ -1,7 +1,9 @@
 package com.idontknow.business.application.services.system;
 
 import com.idontknow.business.application.services.base.BaseService;
+import com.idontknow.business.application.services.system.dto.CreateUsersRequest;
 import com.idontknow.business.application.services.system.dto.RolesResponse;
+import com.idontknow.business.application.services.system.dto.UpdateRolesRequest;
 import com.idontknow.business.application.services.system.query.DefaultSearchSort;
 import com.idontknow.business.application.services.system.query.SearchRolesFilter;
 import com.idontknow.business.application.services.system.query.SearchRolesRequest;
@@ -87,6 +89,14 @@ public class RolesService extends BaseService<RoleEntity> {
 
         builder.and(qRole.deleted.eq(false));
         return builder;
+    }
+
+    public RoleEntity create(RoleEntity entity) {
+        return domainService.create(entity);
+    }
+
+    public RoleEntity update(RoleEntity entity) {
+       return domainService.update(entity);
     }
 
 }
