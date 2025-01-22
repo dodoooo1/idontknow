@@ -23,9 +23,6 @@ public class DictionaryEntryEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "organization_id", nullable = false)
-    private Long organizationId;
-
     @Column(name = "entry_value", nullable = false)
     private String entryValue;
 

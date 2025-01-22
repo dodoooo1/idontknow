@@ -18,7 +18,6 @@ import java.util.Objects;
 @Setter
 @RequiredArgsConstructor
 @Slf4j
-
 public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -26,32 +25,37 @@ public class JwtAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String token = (String) authentication.getPrincipal();
-        // Validate the JWT token here
-        if (jwtTokenProvider.isTokenExpired(token)) {
-            throw new BadCredentialsException("Invalid JWT token");
-        }
-        Claims claims = jwtTokenProvider.extractAllClaims(token);
-        String username = claims.getSubject();
-        CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
-        if (Objects.isNull(userDetails)) {
-            throw new BadCredentialsException("Invalid JWT token");
-        }
-        Long organizationId = Long.parseLong((String) claims.get("organizationId"));
-        OrganizationEntity currentOrganization = userDetails.getOrganizations().stream().filter(organizationEntity -> organizationEntity.getId().equals(organizationId)).findFirst().orElseThrow();
-        userDetails.setCurrentOrganization(currentOrganization);
-        JwtAuthenticationToken.UserInfo userInfo = JwtAuthenticationToken.UserInfo.builder().id(userDetails.getId())
-                .name(userDetails.getName())
-                .email(userDetails.getEmail())
-                .username(username)
-                .roles(userDetails.getRoles())
-                .organization(currentOrganization)
-                .build();
+        try {
+            String token = (String) authentication.getPrincipal();
+            // Validate the JWT token here
+            if (jwtTokenProvider.isTokenExpired(token)) {
+                throw new AuthenticationException("Invalid JWT token") {
+                };
+            }
+            Claims claims = jwtTokenProvider.extractAllClaims(token);
+            String username = claims.getSubject();
+            CustomUserDetails userDetails = (CustomUserDetails) userDetailsService.loadUserByUsername(username);
+            if (Objects.isNull(userDetails)) {
+                throw new BadCredentialsException("Invalid JWT token");
+            }
+            Long organizationId = Long.parseLong((String) claims.get("organizationId"));
+            OrganizationEntity currentOrganization = userDetails.getOrganizations().stream().filter(organizationEntity -> organizationEntity.getId().equals(organizationId)).findFirst().orElseThrow();
+            userDetails.setCurrentOrganization(currentOrganization);
+            JwtAuthenticationToken.UserInfo userInfo = JwtAuthenticationToken.UserInfo.builder().id(userDetails.getId())
+                    .name(userDetails.getName())
+                    .email(userDetails.getEmail())
+                    .username(username)
+                    .roles(userDetails.getRoles())
+                    .organization(currentOrganization)
+                    .build();
 
-        JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(token, true, userInfo, userDetails.getAuthorities());
-        // 设置 SecurityContext
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        return authenticationToken;
+            JwtAuthenticationToken authenticationToken = new JwtAuthenticationToken(token, true, userInfo, userDetails.getAuthorities());
+            // 设置 SecurityContext
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            return authenticationToken;
+        } catch (Exception e) {
+            throw new BadCredentialsException(e.getMessage());
+        }
     }
 
     @Override

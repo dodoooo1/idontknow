@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,8 +46,10 @@ public class AuthenticationController {
                 return ResponseEntity.ok(LoginResponse.builder().multiOrganization(true).organizations(organizationsResponses).build());
             }
         }
+        Assert.isTrue(Objects.nonNull(loginUserDto.organizationId()), "organizationId is null");
         String token = authenticationService.authenticate(loginUserDto);
-        LoginResponse loginResponse = LoginResponse.builder().token(token).build();
+        LoginResponse loginResponse = LoginResponse.builder().accessToken(token).build();
+        log.info("loginResponse:{}", loginResponse.getAccessToken());
         return ResponseEntity.ok(loginResponse);
     }
 }

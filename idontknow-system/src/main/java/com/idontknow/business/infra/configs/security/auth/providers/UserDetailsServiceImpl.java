@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -33,10 +34,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
    // @Cacheable(value = "userDetails", key = "#username")
-    public CustomUserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public CustomUserDetails loadUserByUsername(String username) {
         QUserEntity qUser = QUserEntity.userEntity;
         BooleanExpression expression = qUser.username.eq(username).or(qUser.email.eq(username));
-        UserEntity user = usersRepository.findOne(expression).orElseThrow(() -> new RuntimeException("User not found"));
+        UserEntity user = usersRepository.findOne(expression).orElseThrow(() ->
+                new UsernameNotFoundException("User not found with username or email: " + username));
+
         QUserOrganizationEntity qUserOrganization = QUserOrganizationEntity.userOrganizationEntity;
         QOrganizationEntity qOrganization = QOrganizationEntity.organizationEntity;
         QUserRoleEntity qUserRole = QUserRoleEntity.userRoleEntity;

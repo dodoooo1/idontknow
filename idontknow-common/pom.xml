@@ -23,5 +23,6 @@
         <module>idontknow-common-cache</module>
         <module>idontknow-common-rabbitmq</module>
         <module>idontknow-common-jpa</module>
+        <module>idontknow-common-rules</module>
     </modules>
 </project>

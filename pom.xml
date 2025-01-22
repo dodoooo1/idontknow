@@ -15,6 +15,7 @@
         <module>idontknow-system</module>
         <module>idontknow-common</module>
         <module>idontknow-start</module>
+        <module>idontknow-batch</module>
     </modules>
 
     <properties>

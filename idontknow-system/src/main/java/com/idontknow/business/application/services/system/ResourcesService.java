@@ -9,7 +9,7 @@ import com.idontknow.business.core.constants.DateConstants;
 import com.idontknow.business.domain.ability.ResourcesDomainService;
 import com.idontknow.business.domain.entities.system.QResourceEntity;
 import com.idontknow.business.domain.entities.system.ResourceEntity;
-import com.idontknow.business.infra.assembler.base.ResourcesMapper;
+import com.idontknow.business.infra.assembler.ResourcesMapper;
 import com.idontknow.business.infra.gatewayimpl.repositories.ResourcesRepository;
 import com.idontknow.business.jpa.ApiListPaginationSuccess;
 import com.querydsl.core.BooleanBuilder;

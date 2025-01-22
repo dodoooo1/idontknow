@@ -1,6 +1,8 @@
 package com.idontknow.business.infra.configs.security.auth.providers;
 
 import com.idontknow.business.application.dto.CustomUserDetails;
+import com.idontknow.business.core.exceptions.types.NotAuthenticationException;
+import com.idontknow.business.core.exceptions.types.NotAuthorizedException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.MacAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -91,22 +93,9 @@ public class JwtTokenProvider {
      * @return The extracted Claims object.
      */
     public Claims extractAllClaims(String token) {
-        try {
             return Jwts.parser()
                     .verifyWith(key)
                     .build().parseSignedClaims(token).getPayload();
-        } catch (JwtException | IllegalArgumentException e) {
-            if (e instanceof MalformedJwtException) {
-                throw new RuntimeException("Invalid JWT token", e);
-            }
-            if (e instanceof ExpiredJwtException) {
-                throw new RuntimeException("JWT has expired", e);
-            }
-            if (e instanceof UnsupportedJwtException) {
-                throw new RuntimeException("Unsupported JWT token", e);
-            }
-            throw new RuntimeException("JWT claims string is empty", e);
-        }
     }
 
     /**

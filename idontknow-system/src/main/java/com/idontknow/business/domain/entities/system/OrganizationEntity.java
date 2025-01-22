@@ -25,8 +25,6 @@ public class OrganizationEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "organization_id", nullable = false)
-    private Long organizationId;
     @Column(name = "parent_id", nullable = false)
     private Long parentId;
 

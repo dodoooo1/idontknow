@@ -1,6 +1,6 @@
 package com.idontknow.business.facades;
 
-import com.idontknow.business.core.exceptions.InternalServerErrorException;
+import com.idontknow.business.core.exceptions.types.InternalServerErrorException;
 import com.idontknow.business.infra.configs.security.auth.providers.JwtAuthenticationToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;

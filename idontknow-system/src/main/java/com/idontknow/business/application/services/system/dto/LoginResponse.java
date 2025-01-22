@@ -17,7 +17,7 @@ import java.util.Set;
 @Setter
 @Builder
 public class LoginResponse {
-    private String token;
+    private String accessToken;
     private String refreshToken;
     private boolean multiOrganization;
     private Set<OrganizationsResponse> organizations;

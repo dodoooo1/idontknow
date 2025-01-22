@@ -1,6 +1,7 @@
 package com.idontknow.business.infra.configs.security;
 
 import com.idontknow.business.core.constants.AppUrls;
+import com.idontknow.business.infra.configs.CustomCorsConfiguration;
 import com.idontknow.business.infra.configs.security.auth.providers.JwtAuthenticationFilter;
 import com.idontknow.business.infra.configs.security.auth.providers.JwtAuthenticationProvider;
 import com.idontknow.business.infra.configs.security.auth.providers.JwtTokenProvider;
@@ -25,7 +26,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
-
+    private final CustomCorsConfiguration customCorsConfiguration;
+    private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -39,8 +41,7 @@ public class SecurityConfig {
 
     @Bean
     public JwtAuthenticationProvider jwtAuthenticationProvider() {
-        JwtAuthenticationProvider provider = new JwtAuthenticationProvider(jwtTokenProvider, userDetailsService);
-        return provider;
+        return new JwtAuthenticationProvider(jwtTokenProvider, userDetailsService);
     }
 
 
@@ -58,9 +59,11 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-                .csrf(AbstractHttpConfigurer::disable);
-        ;
+                .cors(c -> c.configurationSource(customCorsConfiguration))
+                .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .authenticationEntryPoint(restAuthenticationEntryPoint)
+                );
 
         return http.build();
     }

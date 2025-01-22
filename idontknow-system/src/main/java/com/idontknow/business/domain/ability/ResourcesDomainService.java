@@ -2,7 +2,7 @@ package com.idontknow.business.domain.ability;
 
 import com.idontknow.business.domain.ability.base.BaseDomainService;
 import com.idontknow.business.domain.entities.system.ResourceEntity;
-import com.idontknow.business.infra.assembler.base.ResourcesMapper;
+import com.idontknow.business.infra.assembler.ResourcesMapper;
 import com.idontknow.business.infra.configs.security.auth.providers.JwtAuthenticationToken;
 import com.idontknow.business.infra.configs.security.auth.providers.SecurityUtils;
 import com.idontknow.business.infra.gatewayimpl.repositories.ResourcesRepository;

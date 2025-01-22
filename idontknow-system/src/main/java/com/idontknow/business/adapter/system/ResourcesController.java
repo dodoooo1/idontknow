@@ -8,7 +8,7 @@ import com.idontknow.business.application.services.system.dto.UpdateResourcesReq
 import com.idontknow.business.application.services.system.query.SearchResourcesRequest;
 import com.idontknow.business.core.constants.AppUrls;
 import com.idontknow.business.domain.entities.system.ResourceEntity;
-import com.idontknow.business.infra.assembler.base.ResourcesMapper;
+import com.idontknow.business.infra.assembler.ResourcesMapper;
 import com.idontknow.business.jpa.ApiListPaginationSuccess;
 import jakarta.validation.Valid;
 import lombok.Getter;

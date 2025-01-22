@@ -1,6 +1,6 @@
 package com.idontknow.business.domain.ability.base;
 
-import com.idontknow.business.core.exceptions.ResourceNotFoundException;
+import com.idontknow.business.core.exceptions.types.ResourceNotFoundException;
 import com.idontknow.business.domain.entities.base.BaseEntity;
 import com.idontknow.business.infra.event.listeners.EntityTransactionLogListener;
 import jakarta.persistence.Table;

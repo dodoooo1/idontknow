@@ -27,7 +27,6 @@ public class RolesDomainService extends BaseDomainService<RoleEntity> {
         Optional<JwtAuthenticationToken> jwtAuthenticationToken = SecurityUtils.getCurrentUser();
         jwtAuthenticationToken.orElseThrow(() -> new RuntimeException("currentUser is null！"));
         JwtAuthenticationToken currentUser = jwtAuthenticationToken.get();
-        entity.setOrganizationId(currentUser.getUserInfo().getOrganization().getId());
 
         return super.create(entity);
     }
